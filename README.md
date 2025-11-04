@@ -1,17 +1,17 @@
 [![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/lI5-VUUL)
 ## **`Information for the Final Project Repository`**
 
-### **`Title: ???`**
+### **`Title: Teman Lansia | Platform Bantu Lansia dengan Relawan Sekitar`**
 
 ---
 
-### **`Kelompok 0?:`**
+### **`Kelompok 12:`**
 
 - **Muhammad Muhibbul Ulum**
 - **Widya Shafiyah**
 - **Anjas Setiawan**
 - **Muhammad Dhiya’ul Haq**
-- **Anas Satria Lombu **
+- **Anas Satria Lombu**
 
 
 
@@ -29,8 +29,8 @@
 
 _(silahkan edit sesuai kebutuhan, ex:)_
 
-- [Slide of Presentation](#)
-- [BPMN - Draw IO](#)
+- [Slide of Presentation](https://www.canva.com/design/DAG3tit8ic8/xj_jlDPQWek82uhbTW9ykw/edit?utm_content=DAG3tit8ic8&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+- [BPMN - Draw IO](https://drive.google.com/file/d/1gGroCouOfqROrz2dPkv7wkKc6c0yJVDT/view?usp=sharing)
 - [Entity Relational Diagram - Draw IO](#)
 - [Data Dummy - Google Sheet](#)
 - [Progress of Project - Google Sheet](#)
