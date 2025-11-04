@@ -11,8 +11,7 @@
 - **Widya Shafiyah**
 - **Anjas Setiawan**
 - **Muhammad Dhiya’ul Haq**
-Anas Satria Lombu
-- ** **
+- **Anas Satria Lombu **
 
 
 
