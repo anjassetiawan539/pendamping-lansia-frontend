@@ -14,9 +14,6 @@
 - **Anas Satria Lombu**
 
 
-
-
-
 ---
 
 ### **`Ketentuan Repository:`**
@@ -30,8 +27,7 @@
 _(silahkan edit sesuai kebutuhan, ex:)_
 
 - [Slide of Presentation](https://www.canva.com/design/DAG3tit8ic8/xj_jlDPQWek82uhbTW9ykw/edit?utm_content=DAG3tit8ic8&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
-- [BPMN - Draw IO](https://drive.google.com/file/d/1gGroCouOfqROrz2dPkv7wkKc6c0yJVDT/view?usp=sharing)
-- [Entity Relational Diagram - Draw IO](#)
+- [BPMN & Entity Relational Diagram - Draw IO](https://drive.google.com/file/d/1gGroCouOfqROrz2dPkv7wkKc6c0yJVDT/view?usp=sharing)
 - [Data Dummy - Google Sheet](#)
 - [Progress of Project - Google Sheet](#)
 
