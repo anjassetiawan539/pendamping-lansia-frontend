@@ -1,0 +1,171 @@
+/* =================================
+Global Styles & Font
+   ================================= */
+
+/* Impor font yang bersih dan modern dari Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+/* === PERUBAHAN UTAMA: Variabel Warna (TEMA BIRU) === */
+:root {
+    --primary-color: #0d6efd;
+    /* Biru Primer Bootstrap (Sesuai Logo) */
+    --accent-color: #00A896;
+    /* Teal/Hijau-Biru (Aksen yang cocok dengan Biru) */
+    --light-bg: #f8f9fa;
+    --dark-text: #333;
+}
+
+/* =================================================== */
+
+body {
+    font-family: 'Poppins', sans-serif;
+    color: var(--dark-text);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-weight: 600;
+    color: #003F72;
+    /* Biru sangat tua untuk judul */
+}
+
+/* =================================
+Navbar
+   ================================= */
+.navbar {
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    background-color: #ffffff !important;
+    transition: all 0.3s ease;
+}
+
+.navbar-brand img {
+    height: 45px;
+    /* Anda bisa sesuaikan ini */
+    width: auto;
+}
+
+.navbar-nav .nav-link {
+    font-weight: 500;
+    color: #555;
+    transition: color 0.3s ease;
+}
+
+/* Efek hover + status 'active' untuk link navbar */
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: var(--accent-color) !important; /* GANTI JADI WARNA AKSEN (TEAL) */
+}
+
+/* Tombol di navbar (Login/Daftar) */
+.navbar .btn-primary {
+    background-color: var(--accent-color); /* GANTI: Tombol Daftar jadi Teal */
+    border-color: var(--accent-color);
+    transition: all 0.3s ease;
+}
+
+.navbar .btn-outline-primary {
+    border-color: var(--accent-color); /* GANTI: Outline Login jadi Teal */
+    color: var(--accent-color);
+}
+
+/* === PERBAIKAN HOVER === */
+.navbar .btn-primary:hover {
+    background-color: #007A6C; /* GANTI: Hover jadi Teal gelap */
+    border-color: #007A6C;
+    transform: scale(1.05);
+}
+
+.navbar .btn-outline-primary:hover {
+    background-color: var(--accent-color); /* GANTI: Hover fill jadi Teal */
+    color: #fff;
+}
+
+
+/* =================================
+Hero Section (Header)
+   ================================= */
+header .display-4 {
+    font-weight: 700;
+    color: var(--dark-text);
+}
+
+/* Tombol "Ajukan Layanan" */
+.btn-success {
+    /* Kita ubah kelas .btn-success agar terlihat beda */
+    background-color: var(--accent-color);
+    /* Menggunakan warna Aksen (Teal) */
+    border-color: var(--accent-color);
+    font-weight: 600;
+    padding: 0.75rem 1.5rem;
+    transition: all 0.3s ease;
+}
+
+/* === PERBAIKAN HOVER === */
+.btn-success:hover {
+    background-color: #007A6C;
+    /* Versi gelap dari Teal */
+    border-color: #007A6C;
+    transform: scale(1.05);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
+
+/* =================================
+Services Section (#services)
+   ================================= */
+#services {
+    background-color: var(--light-bg);
+    border-radius: 15px;
+}
+
+#services .card {
+    border: none;
+    border-radius: 10px;
+    transition: all 0.3s ease;
+}
+
+#services .card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+}
+
+
+/* Ikon layanan akan jadi Teal (Warna Aksen) */
+#services .card .bi {
+    color: var(--accent-color); /* <-- GANTI INI */
+    font-size: 3rem !important;
+}
+/* =================================
+About & Contact Section
+   ================================= */
+#about .lead {
+    color: var(--primary-color);
+    /* Sub-judul jadi Biru */
+    font-weight: 500;
+}
+
+/* Tombol "Kirim Pesan" */
+#contact .btn-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    font-weight: 500;
+}
+
+#contact .btn-primary:hover {
+    background-color: #0a58ca;
+    /* Biru lebih gelap */
+    border-color: #0a58ca;
+}
+
+
+/* =================================
+Footer
+   ================================= */
+footer.border-top {
+    border-top-color: #ddd !important;
+    background-color: var(--light-bg);
+}
