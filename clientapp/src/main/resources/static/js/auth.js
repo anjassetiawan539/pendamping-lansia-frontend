@@ -1,5 +1,5 @@
 // Gunakan URL API dari serverapp di sini
-const API_BASE_URL = "http://localhost:8081/api/auth";
+// const API_BASE_URL = "http://localhost:8081/api/auth";
 
 $(document).ready(function () {
 
