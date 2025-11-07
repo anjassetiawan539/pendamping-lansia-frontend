@@ -1,25 +1,28 @@
 /* =================================
 Global Styles & Font
-   ================================= */
+================================= */
 
 /* Impor font yang bersih dan modern dari Google Fonts */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-/* === PERUBAHAN UTAMA: Variabel Warna (TEMA BIRU) === */
+
+
 :root {
-    --primary-color: #0d6efd;
-    /* Biru Primer Bootstrap (Sesuai Logo) */
     --accent-color: #00A896;
-    /* Teal/Hijau-Biru (Aksen yang cocok dengan Biru) */
+    /* Teal/Hijau-Biru */
     --light-bg: #f8f9fa;
     --dark-text: #333;
 }
 
 /* =================================================== */
-
+/* GLOBAL DARK MODE BASE */
 body {
     font-family: 'Poppins', sans-serif;
-    color: var(--dark-text);
+    color: #cccccc;
+    /* Teks default terang */
+    background-color: #111111;
+    /* Latar belakang body gelap */
+    overflow-x: hidden;
 }
 
 h1,
@@ -29,143 +32,552 @@ h4,
 h5,
 h6 {
     font-weight: 600;
-    color: #003F72;
-    /* Biru sangat tua untuk judul */
+    color: #ffffff;
+    /* Judul jadi putih */
 }
 
 /* =================================
-Navbar
-   ================================= */
+Navbar (TRANSPARAN / GLASSMORPHISM)
+================================= */
 .navbar {
     padding-top: 0.25rem;
     padding-bottom: 0.25rem;
-    background-color: #ffffff !important;
+
+    /* GANTI: Warna solid gelap, hilangkan blur dan transparansi */
+    background-color: #1a1a1a !important;
+    backdrop-filter: none;
+
+    /* Tambahkan bayangan ke bawah agar terlihat terpisah */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5) !important;
+
     transition: all 0.3s ease;
 }
 
 .navbar-brand img {
-    height: 45px;
-    /* Anda bisa sesuaikan ini */
+    height: 50px;
     width: auto;
+    
+    /* === TAMBAHKAN ATAU MODIFIKASI INI UNTUK EFEK GLOW PADA LOGO === */
+    filter: drop-shadow(0 0 10px rgba(0, 168, 150, 0.7)); 
+    
+    /* Opsi tambahan: Sedikit transisi untuk efek hover */
+    transition: all 0.3s ease;
+
+    /* --- TAMBAHKAN ANIMASI SOFT PULSE --- */
+    animation: logoPulse 4s ease-in-out infinite alternate;
 }
 
+/* --- Keyframes BARU untuk Logo Pulse --- */
+@keyframes logoPulse {
+    0% {
+        filter: drop-shadow(0 0 10px rgba(0, 168, 150, 0.7));
+        transform: scale(1);
+    }
+    50% {
+        /* Puncak Denyutan: Glow lebih kuat dan sedikit membesar */
+        filter: drop-shadow(0 0 15px rgba(0, 168, 150, 1));
+        transform: scale(1.015); 
+    }
+    100% {
+        filter: drop-shadow(0 0 10px rgba(0, 168, 150, 0.7));
+        transform: scale(1);
+    }
+}
+/* Opsi: Tambahkan efek glow yang lebih kuat saat hover */
+.navbar-brand img:hover {
+    filter: drop-shadow(0 0 15px rgba(0, 168, 150, 1));
+    transform: scale(1.05); /* Sedikit membesar saat di-hover */
+}
 .navbar-nav .nav-link {
     font-weight: 500;
-    color: #555;
-    transition: color 0.3s ease;
+    color: #ffffff !important;
+    /* Warna Tautan menjadi Putih/Terang */
+    transition: all 0.3s ease;
+    border-bottom: 3px solid transparent;
+    padding-bottom: 0.3rem;
 }
 
 /* Efek hover + status 'active' untuk link navbar */
 .navbar-nav .nav-link:hover,
 .navbar-nav .nav-link.active {
-    color: var(--accent-color) !important; /* GANTI JADI WARNA AKSEN (TEAL) */
+    color: var(--accent-color) !important;
+    border-bottom: none;
 }
 
-/* Tombol di navbar (Login/Daftar) */
+/* Border-bottom di desktop */
+@media (min-width: 992px) {
+
+    .navbar-nav .nav-link:hover,
+    .navbar-nav .nav-link.active {
+        border-bottom: 3px solid var(--accent-color);
+    }
+}
+
+/* Tombol di navbar */
 .navbar .btn-primary {
-    background-color: var(--accent-color); /* GANTI: Tombol Daftar jadi Teal */
+    background-color: var(--accent-color);
     border-color: var(--accent-color);
     transition: all 0.3s ease;
 }
 
 .navbar .btn-outline-primary {
-    border-color: var(--accent-color); /* GANTI: Outline Login jadi Teal */
+    border-color: var(--accent-color);
     color: var(--accent-color);
 }
 
-/* === PERBAIKAN HOVER === */
+.btn-primary.btn-lg {
+    /* Menargetkan tombol CTA utama dengan ukuran besar */
+    background-color: #00A896 !important;
+    border-color: #00A896 !important;
+
+    /* Pertahankan glow dan animasi */
+    box-shadow: 0 0 15px rgba(0, 168, 150, 0.6);
+    animation: ctaPulse 3s infinite;
+}
+
+/* Hover Tombol Navbar */
 .navbar .btn-primary:hover {
-    background-color: #007A6C; /* GANTI: Hover jadi Teal gelap */
+    background-color: #007A6C;
     border-color: #007A6C;
-    transform: scale(1.05);
 }
 
 .navbar .btn-outline-primary:hover {
-    background-color: var(--accent-color); /* GANTI: Hover fill jadi Teal */
+    background-color: var(--accent-color);
     color: #fff;
 }
 
-
 /* =================================
-Hero Section (Header)
-   ================================= */
+Hero Section (Beranda)
+================================= */
+.full-height-hero {
+    min-height: 100vh;
+    padding-top: 100px;
+    background-color: #111111;
+    overflow: hidden;
+    color: #ffffff;
+    position: relative;
+    /* PASTIKAN INI ADA */
+}
+
 header .display-4 {
     font-weight: 700;
-    color: var(--dark-text);
+    color: #ffffff;
 }
 
-/* Tombol "Ajukan Layanan" */
-.btn-success {
-    /* Kita ubah kelas .btn-success agar terlihat beda */
-    background-color: var(--accent-color);
-    /* Menggunakan warna Aksen (Teal) */
+.full-height-hero p.lead {
+    font-size: 1.25rem;
+    color: #cccccc;
+    font-weight: 500;
+    text-shadow: none;
+    /* Hapus shadow yang tidak perlu */
+}
+
+/* SVG Background Peta */
+.full-height-hero::before {
+    content: "";
+    background-image: url('assets/world.svg');
+    background-size: 50%;
+    background-repeat: no-repeat;
+    background-position: center 55%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    opacity: 0.3;
+    /* Opacity ditingkatkan untuk latar gelap */
+    filter: drop-shadow(0 0 20px var(--accent-color));
+    /* Glow yang kuat */
+    z-index: 1;
+    animation: slowRotate 120s linear infinite, slowPulse 6s ease-in-out infinite alternate;
+    transform-origin: center;
+}
+
+.full-height-hero>.container {
+    margin-top: -35vh;
+    position: relative;
+    z-index: 2;
+}
+
+/* =================================
+About Section (#about) - DARK MODE
+================================= */
+#about {
+    /* Konsisten dengan Hero */
+    background-color: #111111;
+    color: #cccccc;
+
+    /* 1. Tambahkan Border Radius untuk tampilan yang lebih halus */
+    border-radius: 15px;
+
+    /* 2. Tambahkan Padding (Jika belum ada di HTML) */
+    padding: 3rem;
+    /* Menjamin ruang di dalam kotak */
+    /* --- PENAMBAHAN UNTUK TAMPILAN TIDAK KAKU --- */
+
+    /* 1. Garis Tepi (Border) dengan Efek Glow Halus */
+    border: 1px solid rgba(0, 168, 150, 0.4);
+    /* Border tipis hologram dengan accent color */
+
+    /* 2. Efek Shadow/Glow */
+    box-shadow: 0 0 20px rgba(0, 168, 150, 0.15);
+    /* Glow yang lebih terasa dengan accent color */
+
+    /* 3. Transisi untuk Efek Hover */
+    transition: all 0.5s ease;
+    /* Transisi yang lebih halus untuk efek hover */
+}
+
+/* Tambahkan Efek Hover (Opsional, tapi meningkatkan kesan dinamis) */
+#about:hover {
+    transform: translateY(-5px) scale(1.005);
+    /* Sedikit naik dan membesar */
+    box-shadow: 0 5px 30px rgba(0, 168, 150, 0.3);
+    /* Glow lebih kuat saat hover */
     border-color: var(--accent-color);
-    font-weight: 600;
-    padding: 0.75rem 1.5rem;
-    transition: all 0.3s ease;
+    /* Border menjadi lebih terang/solid */
 }
 
-/* === PERBAIKAN HOVER === */
-.btn-success:hover {
-    background-color: #007A6C;
-    /* Versi gelap dari Teal */
-    border-color: #007A6C;
-    transform: scale(1.05);
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+/* Pastikan style ikonnya terlihat menonjol */
+#about .bi-people-fill {
+    color: var(--accent-color);
+    font-size: 10rem !important;
+    /* Efek glow yang lebih menonjol */
+    filter: drop-shadow(0 0 20px var(--accent-color));
+}
+
+#about h2 {
+    color: #ffffff;
+}
+
+#about p.lead {
+    color: var(--accent-color);
+    font-weight: 500;
+}
+
+#about p {
+    color: #cccccc;
+}
+
+#about .bi-people-fill {
+    color: var(--accent-color);
+    font-size: 10rem !important;
+    filter: drop-shadow(0 0 10px var(--accent-color));
 }
 
 /* =================================
 Services Section (#services)
-   ================================= */
+================================= */
 #services {
-    background-color: var(--light-bg);
+    /* Gradien Dark Mode */
+    background-color: #111111 !important;
+    background-color: #262626;
+    color: #fff;
     border-radius: 15px;
+    padding: 5rem;
+    border-radius: 15px;
+    border: 1px solid rgba(0, 168, 150, 0.4);
+    box-shadow: 0 0 20px rgba(0, 168, 150, 0.15);
+    transition: all 0.5s ease;
+    padding: 5rem;
+}
+
+/* style.css */
+
+/* Targetkan ikon di judul Layanan Kami */
+/* style.css */
+
+/* Targetkan WRAPPER (span) untuk animasi */
+#services h2 .gear-icon {
+    /* Menerapkan animasi ke SPAN */
+    animation: spin 5s linear infinite;
+
+    /* Atur tampilan agar span tidak menghalangi */
+    display: inline-block;
+    vertical-align: middle;
+}
+
+/* Targetkan IKON (i) untuk styling visual */
+#services h2 .gear-icon .bi {
+    color: var(--accent-color);
+    font-size: 1.2em;
+    vertical-align: -0.1em;
+    /* Mengangkat sedikit ke atas */
+    filter: drop-shadow(0 0 5px var(--accent-color));
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+
+#services:hover {
+    transform: translateY(-5px) scale(1.005);
+    box-shadow: 0 5px 30px rgba(0, 168, 150, 0.3);
+    border-color: var(--accent-color);
+}
+
+#services h2 {
+    color: #fff;
 }
 
 #services .card {
-    border: none;
+    background-color: #1a1a1a !important;
+    color: #fff;
+    border: 1px solid rgba(0, 168, 150, 0.4);
+    box-shadow: 0 0 15px rgba(0, 168, 150, 0.15);
     border-radius: 10px;
-    transition: all 0.3s ease;
+    transition: all 0.5s ease;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+    transform: rotateY(0deg) scale(1);
 }
 
 #services .card:hover {
-    transform: translateY(-8px);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.08);
+    transform: translateY(-10px) scale(1.03);
+    box-shadow: 0 5px 30px rgba(0, 168, 150, 0.4);
+    border-color: var(--accent-color);
 }
 
-
-/* Ikon layanan akan jadi Teal (Warna Aksen) */
 #services .card .bi {
-    color: var(--accent-color); /* <-- GANTI INI */
+    color: var(--accent-color);
     font-size: 3rem !important;
+    filter: drop-shadow(0 0 5px var(--accent-color));
 }
+
+#services .card .card-title {
+    color: #fff;
+    font-weight: 700;
+}
+
+#services .card .card-text {
+    color: #ccc;
+}
+
 /* =================================
-About & Contact Section
-   ================================= */
-#about .lead {
-    color: var(--primary-color);
-    /* Sub-judul jadi Biru */
-    font-weight: 500;
+Contact Section (#contact) - DARK MODE
+================================= */
+#contact {
+    background-color: #111111 !important;
+    border-radius: 15px;
+    border: 1px solid rgba(0, 168, 150, 0.4);
+    box-shadow: 0 0 20px rgba(0, 168, 150, 0.15);
+    transition: all 0.5s ease;
+    color: #cccccc;
+    padding: 3rem;
+}
+
+/* style.css */
+
+/* Targetkan WRAPPER (span) untuk animasi di Contact */
+#contact h2 .contact-icon {
+    /* Menerapkan animasi WIGGLE */
+    animation: wiggleMessage 2.5s ease-in-out infinite; 
+    
+    display: inline-block;
+    vertical-align: middle; 
+}
+
+/* Targetkan IKON (i) untuk styling visual di Contact */
+#contact h2 .contact-icon .bi {
+    color: var(--accent-color);
+    font-size: 1.2em; 
+    vertical-align: -0.1em; /* Mengangkat sedikit ke atas */
+    filter: drop-shadow(0 0 5px var(--accent-color));
+}
+
+/* --- Keyframes BARU untuk Ikon Kontak (Wiggle/Undulation) --- */
+@keyframes wiggleMessage {
+    0%, 100% {
+        transform: translateY(0) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-5px) rotate(2deg);
+    }
+    50% {
+        transform: translateY(0) rotate(-2deg);
+    }
+    75% {
+        transform: translateY(-5px) rotate(2deg);
+    }
+}
+
+#contact:hover {
+    transform: translateY(-5px) scale(1.005);
+    box-shadow: 0 5px 30px rgba(0, 168, 150, 0.3);
+    border-color: var(--accent-color);
+}
+
+#contact h2 {
+    color: #ffffff;
+}
+
+#contact .form-label {
+    color: #cccccc;
+}
+
+/* Style Input Forms untuk Dark Mode */
+#contact .form-control {
+    background-color: #262626;
+    border-color: #444;
+    color: #fff;
+}
+
+#contact .form-control:focus {
+    background-color: #262626;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 0.25rem rgba(0, 168, 150, 0.25);
 }
 
 /* Tombol "Kirim Pesan" */
 #contact .btn-primary {
-    background-color: var(--primary-color);
-    border-color: var(--primary-color);
+    background-color: var(--accent-color);
+    border-color: var(--accent-color);
     font-weight: 500;
+    transition: all 0.3s ease;
 }
 
 #contact .btn-primary:hover {
-    background-color: #0a58ca;
-    /* Biru lebih gelap */
-    border-color: #0a58ca;
+    background-color: #007A6C;
+    border-color: #007A6C;
+    opacity: 0.95;
+}
+
+/* =================================
+Keyframes Animasi
+================================= */
+@keyframes slowPulse {
+    0% {
+        opacity: 0.1;
+        transform: scale(1);
+    }
+
+    50% {
+        opacity: 0.3;
+        transform: scale(1.05);
+    }
+
+    100% {
+        opacity: 0.1;
+        transform: scale(1);
+    }
+}
+
+/* style.css */
+
+@keyframes ctaPulse {
+    0% {
+        /* Mulai: Shadow tipis dan ukuran normal */
+        box-shadow: 0 0 0 0 rgba(0, 168, 150, 0.7);
+        transform: scale(1);
+        /* Ukuran normal */
+    }
+
+    50% {
+        /* Tengah: Shadow menyebar dan zoom in */
+        box-shadow: 0 0 0 15px rgba(0, 168, 150, 0.1);
+        transform: scale(1.03);
+        /* Sedikit zoom in */
+    }
+
+    100% {
+        /* Kembali ke awal */
+        box-shadow: 0 0 0 0 rgba(0, 168, 150, 0.7);
+        transform: scale(1);
+        /* Kembali ke normal */
+    }
 }
 
 
 /* =================================
-Footer
-   ================================= */
+Register/Login Form Styles (Dark Mode)
+================================= */
+
+/* Container Card Utama */
+.register-card-custom {
+    /* Gunakan properti yang sama dengan #about/ #contact */
+    background-color: #1a1a1a !important; 
+    border-radius: 15px !important;
+    border: 1px solid rgba(0, 168, 150, 0.4); 
+    box-shadow: 0 0 20px rgba(0, 168, 150, 0.25) !important; /* Glow yang lebih kuat untuk fokus */
+    transition: all 0.3s ease;
+}
+
+/* Style untuk Input Fields (form-control, form-select) */
+.dark-input-custom {
+    background-color: #262626 !important; /* Latar belakang input gelap */
+    border-color: #444 !important; /* Border abu-abu tua */
+    color: #ffffff !important; /* Teks input putih */
+}
+
+/* Style untuk saat input di-focus */
+.dark-input-custom:focus {
+    background-color: #262626 !important;
+    border-color: var(--accent-color) !important; /* Border focus warna Teal */
+    box-shadow: 0 0 0 0.25rem rgba(0, 168, 150, 0.25) !important;
+}
+
+
+/* Style untuk tombol Toggle Password */
+.dark-btn-outline {
+    background-color: #262626 !important;
+    border-color: #444 !important;
+}
+
+.dark-btn-outline:hover {
+    background-color: #333 !important;
+    border-color: #444 !important;
+}
+
+/* Tombol Submit (Primary) */
+.btn-primary {
+    /* Pastikan tombol primary memiliki glow dan warna aksen */
+    background-color: var(--accent-color) !important;
+    border-color: var(--accent-color) !important;
+    box-shadow: 0 0 10px rgba(0, 168, 150, 0.5);
+    transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #007A6C !important;
+    border-color: #007A6C !important;
+    box-shadow: 0 0 15px rgba(0, 168, 150, 0.8);
+    transform: scale(1.01);
+}
+
+/* style.css */
+
+.navbar-brand img {
+    /* Pastikan tinggi (height) logo diatur dengan jelas */
+    height: 50px;
+    width: auto;
+    display: inline-block; /* Memastikan elemen diatur dengan benar */
+    
+    /* Efek Glow yang sudah ada */
+    filter: drop-shadow(0 0 10px rgba(0, 168, 150, 0.7));
+    transition: all 0.3s ease;
+    animation: logoPulse 4s ease-in-out infinite alternate;
+}
+
+/* Tambahkan ini jika ada konflik di halaman statis seperti register.html */
+.navbar-brand {
+    padding: 0; /* Hapus padding yang mungkin mendorong gambar */
+}
+
+/* =================================
+Footer - DARK MODE
+================================= */
+footer {
+    background-color: #0d0d0d !important;
+    color: #ffffff !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
 footer.border-top {
-    border-top-color: #ddd !important;
-    background-color: var(--light-bg);
+    border-top-color: rgba(255, 255, 255, 0.1) !important;
 }

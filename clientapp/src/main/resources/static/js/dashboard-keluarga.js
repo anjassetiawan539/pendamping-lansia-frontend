@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    const DEV_BYPASS = true;
+    const DEV_BYPASS = false; // Set ke true untuk bypass login saat development
     const USER_API_URL = "http://localhost:9000/api/user";
 
     if (DEV_BYPASS) {
