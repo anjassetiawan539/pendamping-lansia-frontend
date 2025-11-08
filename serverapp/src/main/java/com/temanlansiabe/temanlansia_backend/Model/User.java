@@ -22,11 +22,35 @@ public class User {
     @Column(name = "user_id", nullable = false)
     private Integer userId;
 
+    @Column(name = "username", nullable = false, unique = true)
+    private String username;
+    
     @Email
     @Column(name = "email", nullable = false, unique = true)
     private String email;
 
     @Column(name = "password", nullable = false)
     private String password;
+
+    @Column(name = "fullname" )
+    private String fullname;
+
+    @Column(name = "phone" )
+    private String phone;
+
+    @Column(name = "province")
+    private String province;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "address_detail" )
+    private String addressDetail;
+
+    @Column(name = "bio" )
+    private String bio;
+
+     @Column(name = "role", nullable = false)
+    private String role;
 
 }
