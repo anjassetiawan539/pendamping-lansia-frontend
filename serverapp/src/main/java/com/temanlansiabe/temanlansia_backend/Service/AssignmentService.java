@@ -31,7 +31,7 @@ public class AssignmentService {
 
     public Assignment update(Integer id, Assignment a) {
         getById(id);
-        a.setId(id);
+        a.setAssignmentId(id);
         return assignmentRepository.save(a);
     }
 

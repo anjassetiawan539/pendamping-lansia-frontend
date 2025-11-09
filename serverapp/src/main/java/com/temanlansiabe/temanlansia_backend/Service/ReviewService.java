@@ -35,7 +35,7 @@ public class ReviewService {
 
     public Review update(Integer id, Review review) {
         getById(id); // Cek apakah review ada
-        review.setId(id);
+        review.setReviewId(id);
         
         // Validasi rating
         if (review.getRating() < 1 || review.getRating() > 5) {

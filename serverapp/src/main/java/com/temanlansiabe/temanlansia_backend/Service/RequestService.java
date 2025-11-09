@@ -35,7 +35,7 @@ public class RequestService {
     // update
     public Request update(Integer id, Request request) {
         getById(id); // Cek apakah request ada
-        request.setId(id);
+        request.setRequestId(id);
         return requestRepository.save(request);
     }
 

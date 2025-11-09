@@ -21,7 +21,8 @@ public class UserService {
     }
     // getById
     public User getById(Integer id){
-        return userRepository.findById(id).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Region not found!!" ));
+        return userRepository.findById(id)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
     }
     // create
     public User create(User user){
