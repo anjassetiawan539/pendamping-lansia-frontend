@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/dashboard :: layout('Dashboard Relawan', ~{::content}, 'relawan', 'Dashboard')}">
+<head>
+    <title>Dashboard Relawan</title>
+</head>
+<body>
+<div th:fragment="content">
+    <div class="container-fluid px-2 px-lg-4 py-3">
+        <div class="row g-3 mb-4">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm bg-success text-white">
+                    <div class="card-body d-flex flex-column flex-lg-row justify-content-between align-items-lg-center">
+                        <div>
+                            <p class="text-uppercase small mb-1 opacity-75">Selamat datang</p>
+                            <h3 class="fw-bold mb-1">Halo, <span id="relawan-hero-name">Relawan</span></h3>
+                            <p class="mb-0">Terima kasih sudah siap membantu para lansia. Pantau tugas dan request terbaru di sini.</p>
+                        </div>
+                        <div class="text-lg-end text-white-50 mt-3 mt-lg-0">
+                            <div><i class="bi bi-envelope"></i> <span id="relawan-hero-email">-</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row g-3 mb-4">
+            <div class="col-12 col-sm-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-uppercase text-muted small mb-1">Request Tersedia</p>
+                            <h2 class="fw-bold mb-0" id="total-available">0</h2>
+                        </div>
+                        <span class="icon icon-shape bg-success-subtle text-success rounded-3">
+                            <i class="bi bi-clipboard-check" style="font-size: 1.8rem;"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-uppercase text-muted small mb-1">Tugas Saya</p>
+                            <h2 class="fw-bold mb-0" id="total-my-tasks">0</h2>
+                        </div>
+                        <span class="icon icon-shape bg-primary-subtle text-primary rounded-3">
+                            <i class="bi bi-list-check" style="font-size: 1.8rem;"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-sm-4">
+                <div class="card border-0 shadow-sm h-100">
+                    <div class="card-body d-flex justify-content-between align-items-center">
+                        <div>
+                            <p class="text-uppercase text-muted small mb-1">Selesai</p>
+                            <h2 class="fw-bold mb-0" id="total-completed">0</h2>
+                        </div>
+                        <span class="icon icon-shape bg-secondary-subtle text-secondary rounded-3">
+                            <i class="bi bi-check2-circle" style="font-size: 1.8rem;"></i>
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="card border-0 shadow-sm">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="mb-0"><i class="bi bi-lightning-charge me-1 text-success"></i> Request Siap Diambil</h5>
+                    <small class="text-muted">Ambil kesempatan untuk membantu lansia yang membutuhkan.</small>
+                </div>
+                <button class="btn btn-outline-success btn-sm" onclick="refreshRelawanData()">
+                    <i class="bi bi-arrow-clockwise"></i> Muat Ulang
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="row" id="available-requests">
+                    <div class="col-12 text-center py-4">
+                        <div class="spinner-border text-success" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script defer th:src="@{/js/api-service.js}"></script>
+    <script defer th:src="@{/js/dashboard-relawan.js}"></script>
+</div>
+</body>
+</html>

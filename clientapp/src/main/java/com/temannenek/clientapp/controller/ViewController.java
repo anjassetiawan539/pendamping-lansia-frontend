@@ -35,17 +35,17 @@ public class ViewController {
     // =========================
     @GetMapping("/dashboard/relawan")
     public String showRelawanDashboard(Model model) {
-        return renderDashboard(model, "relawan", "Dashboard");
+        return renderRelawanPage(model, "Dashboard", "pages/dashboard/relawan/dashboard");
     }
 
     @GetMapping("/dashboard/relawan/tugas-layanan")
     public String showRelawanTaskMenu(Model model) {
-        return renderDashboard(model, "relawan", "Tugas Layanan");
+        return renderRelawanPage(model, "Tugas Layanan", "pages/dashboard/relawan/tasks");
     }
 
     @GetMapping("/dashboard/relawan/lihat-rating")
     public String showRelawanRatingMenu(Model model) {
-        return renderDashboard(model, "relawan", "Lihat Rating dan Ulasan");
+        return renderRelawanPage(model, "Lihat Rating dan Ulasan", "pages/dashboard/relawan/reviews");
     }
 
     // =========================
@@ -78,6 +78,13 @@ public class ViewController {
         model.addAttribute("role", "lansia");
         model.addAttribute("menuTitle", menuTitle);
         model.addAttribute("pageTitle", buildPageTitle("lansia", menuTitle));
+        return viewName;
+    }
+
+    private String renderRelawanPage(Model model, String menuTitle, String viewName) {
+        model.addAttribute("role", "relawan");
+        model.addAttribute("menuTitle", menuTitle);
+        model.addAttribute("pageTitle", buildPageTitle("relawan", menuTitle));
         return viewName;
     }
 
