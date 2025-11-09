@@ -17,7 +17,7 @@
     </nav>
 
     <div class="container my-5">
-        <h2 class="mb-4">Halo, [Nama Pengguna]!</h2>
+        <h2 class="mb-4">Halo, <span id="greeting-name">Keluarga</span>!</h2>
         
         <div class="card shadow-sm">
             <div class="card-header">
@@ -33,10 +33,39 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr><td colspan="3">Memuat data...</td></tr>
+                        <tr><td colspan="2">Memuat data...</td></tr>
                         </tbody>
                     </table>
                 </div>
+            </div>
+        </div>
+
+        <div class="card mt-4 shadow-sm">
+            <div class="card-header">
+                <h5 class="mb-0">Berikan Ulasan untuk Relawan</h5>
+            </div>
+            <div class="card-body">
+                <div id="review-feedback" class="d-none"></div>
+                <form id="review-form">
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="review-request-id" class="form-label">ID Permintaan</label>
+                            <input type="number" class="form-control" id="review-request-id" placeholder="Contoh: 12" required>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="review-rating" class="form-label">Rating (1-5)</label>
+                            <input type="number" class="form-control" id="review-rating" min="1" max="5" required>
+                        </div>
+                        <div class="col-12">
+                            <label for="review-comment" class="form-label">Komentar</label>
+                            <textarea class="form-control" id="review-comment" rows="3" placeholder="Ceritakan pengalaman Anda" maxlength="500"></textarea>
+                        </div>
+                    </div>
+                    <div class="text-end mt-3">
+                        <button type="submit" class="btn btn-primary">Kirim Ulasan</button>
+                    </div>
+                </form>
+                <small class="text-muted d-block mt-2">Hanya permintaan berstatus selesai (DONE) yang dapat dinilai.</small>
             </div>
         </div>
     </div>

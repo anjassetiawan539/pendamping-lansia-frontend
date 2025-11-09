@@ -31,6 +31,9 @@ $(document).ready(function () {
                 const role = (response.role || "").toLowerCase();
                 localStorage.setItem('authToken', response.token);
                 localStorage.setItem('userRole', role);
+                if (response.userId) {
+                    localStorage.setItem('userId', response.userId);
+                }
 
                 // Arahkan berdasarkan role
                 if (role === "keluarga") {

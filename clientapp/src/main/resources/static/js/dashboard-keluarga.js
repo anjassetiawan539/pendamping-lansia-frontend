@@ -1,6 +1,9 @@
 $(document).ready(function() {
 
     const USER_API_URL = "http://localhost:9000/api/user/me";
+    const ASSIGNMENT_BY_REQUEST_API = (requestId) => `http://localhost:9000/api/assignments/request/${requestId}`;
+    const REVIEW_API_URL = "http://localhost:9000/api/reviews";
+    let currentUserId = null;
 
     // ===================================
     // 1. CEK KEAMANAN (PENTING!)
@@ -25,6 +28,7 @@ $(document).ready(function() {
         // Hapus data dari localStorage
         localStorage.removeItem('authToken');
         localStorage.removeItem('userRole');
+        localStorage.removeItem('userId');
         
         // Redirect ke login
         alert("Anda berhasil logout.");
@@ -49,6 +53,9 @@ $(document).ready(function() {
             $("#user-table tbody").html(`<tr><td colspan="2">Profil tidak ditemukan.</td></tr>`);
             return;
         }
+        currentUserId = user.userId;
+        $("#greeting-name").text(user.fullname ?? user.username ?? "Keluarga");
+        localStorage.setItem('userId', currentUserId);
         $("#user-table tbody").html(`
             <tr>
                 <td>${user.fullname ?? user.username ?? "-"}</td>
@@ -88,4 +95,82 @@ $(document).ready(function() {
     //         </ul>
     //     `);
     // }, 1000); // Simulasi delay 1 detik
+
+    $("#review-form").on("submit", function(event) {
+        event.preventDefault();
+        $("#review-feedback").addClass("d-none").removeClass("alert-success alert-danger").text("");
+
+        const requestId = parseInt($("#review-request-id").val(), 10);
+        const rating = parseInt($("#review-rating").val(), 10);
+        const comment = $("#review-comment").val();
+
+        if (!requestId || !rating || !currentUserId) {
+            showReviewFeedback("Request ID dan rating wajib diisi.", true);
+            return;
+        }
+
+        fetchAssignmentVolunteer(requestId)
+            .done(assignments => {
+                if (!Array.isArray(assignments) || assignments.length === 0) {
+                    showReviewFeedback("Tidak ditemukan relawan untuk permintaan tersebut.", true);
+                    return;
+                }
+                const volunteer = assignments[0].volunteer;
+                const volunteerId = volunteer ? volunteer.userId : null;
+                if (!volunteerId) {
+                    showReviewFeedback("Data relawan tidak lengkap untuk permintaan tersebut.", true);
+                    return;
+                }
+                submitReview(requestId, rating, comment, volunteerId);
+            })
+            .fail(xhr => handleReviewError(xhr));
+    });
+
+    function fetchAssignmentVolunteer(requestId) {
+        return $.ajax({
+            method: "GET",
+            url: ASSIGNMENT_BY_REQUEST_API(requestId),
+            headers
+        });
+    }
+
+    function submitReview(requestId, rating, comment, volunteerId) {
+        $.ajax({
+            method: "POST",
+            url: REVIEW_API_URL,
+            headers: {
+                ...headers,
+                "Content-Type": "application/json"
+            },
+            data: JSON.stringify({
+                requestId,
+                reviewerUserId: currentUserId,
+                revieweeUserId: volunteerId,
+                rating,
+                comment
+            }),
+            success: () => {
+                showReviewFeedback("Terima kasih! Ulasan berhasil dikirim.", false);
+                $("#review-form")[0].reset();
+            },
+            error: handleReviewError
+        });
+    }
+
+    function handleReviewError(xhr) {
+        if (xhr.status === 401) {
+            alert("Sesi tidak valid, silakan login.");
+            window.location.href = "/login.html";
+            return;
+        }
+        const message = (xhr.responseJSON && xhr.responseJSON.message) || "Gagal mengirim ulasan.";
+        showReviewFeedback(message, true);
+    }
+
+    function showReviewFeedback(message, isError) {
+        $("#review-feedback")
+            .removeClass("d-none alert-success alert-danger")
+            .addClass(isError ? "alert alert-danger" : "alert alert-success")
+            .text(message);
+    }
 });
