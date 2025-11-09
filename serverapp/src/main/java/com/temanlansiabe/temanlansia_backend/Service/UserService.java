@@ -32,6 +32,11 @@ public class UserService {
         return userRepository.save(user);
     }
 
+    public User getByUsername(String username) {
+        return userRepository.findByUsername(username)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User tidak ditemukan"));
+    }
+
     public User updatePartial(Integer id, UserUpdateDto dto){
         User user = getById(id);
 

@@ -22,12 +22,13 @@ public class AdminSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) {
         if (userRepository.existsByUsername("admin")) {
+            System.out.println("Admin default sudah ada, seeder dilewati.");
             return;
         }
 
         User admin = new User();
         admin.setUsername("admin");
-        admin.setEmail("admin@gmail.com");
+        admin.setEmail("admin@temanlansia.com");
         admin.setPassword(passwordEncoder.encode("Admin1234"));
         admin.setRole(Role.ADMIN);
         admin.setFullname("Administrator");
@@ -38,5 +39,6 @@ public class AdminSeeder implements CommandLineRunner {
         admin.setBio("Default admin account");
 
         userRepository.save(admin);
+        System.out.println("Admin default berhasil dibuat.");
     }
 }
