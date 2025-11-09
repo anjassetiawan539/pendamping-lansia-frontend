@@ -2,8 +2,6 @@ package com.temanlansiabe.temanlansia_backend.Dto;
 
 import java.time.LocalDateTime;
 
-import com.temanlansiabe.temanlansia_backend.Model.Request.StatusType;
-
 import jakarta.validation.constraints.FutureOrPresent;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -34,6 +32,5 @@ public class RequestDto {
     @Positive
     private Integer duration;
 
-    @NotNull
-    private StatusType status;
+    // Status akan ditentukan server, tidak diterima dari klien
 }

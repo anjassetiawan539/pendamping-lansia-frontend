@@ -64,7 +64,6 @@ public class RequestController {
         request.setDeskripsi(dto.getDeskripsi());
         request.setStartTime(dto.getStartTime());
         request.setDuration(dto.getDuration());
-        request.setStatus(dto.getStatus());
         return request;
     }
 
