@@ -1,12 +1,6 @@
 $(document).ready(function() {
 
-    const DEV_BYPASS = false; // Set ke true untuk bypass login saat development
-    const USER_API_URL = "http://localhost:9000/api/user";
-
-    if (DEV_BYPASS) {
-        localStorage.setItem('authToken', 'dev-token');
-        localStorage.setItem('userRole', 'keluarga');
-    }
+    const USER_API_URL = "http://localhost:9000/api/user/me";
 
     // ===================================
     // 1. CEK KEAMANAN (PENTING!)
@@ -17,7 +11,7 @@ $(document).ready(function() {
 
     const headers = token ? { "Authorization": `Bearer ${token}` } : {};
 
-    if (!DEV_BYPASS && (!token || role !== 'keluarga')) {
+    if (!token || role !== 'keluarga') {
         // Jika tidak ada token, atau role bukan keluarga, tendang kembali ke login
         alert("Anda harus login sebagai Keluarga untuk mengakses halaman ini.");
         window.location.href = "/login.html";
@@ -37,40 +31,39 @@ $(document).ready(function() {
         window.location.href = "/login.html";
     });
 
-    loadUsers();
+    loadProfile();
 
-    function loadUsers() {
-    $("#user-table tbody").html(`<tr><td colspan="3">Memuat data...</td></tr>`);
-    $.ajax({
-        method: "GET",
-        url: USER_API_URL,
-        headers,
-        success: renderUserTable,
-        error: handleFetchError
-    });
+    function loadProfile() {
+        $("#user-table tbody").html(`<tr><td colspan="2">Memuat data...</td></tr>`);
+        $.ajax({
+            method: "GET",
+            url: USER_API_URL,
+            headers,
+            success: renderUserRow,
+            error: handleFetchError
+        });
     }
 
-    function renderUserTable(users) {
-        if (!Array.isArray(users) || users.length === 0) {
-            $("#user-table tbody").html(`<tr><td colspan="3">Belum ada data.</td></tr>`);
+    function renderUserRow(user) {
+        if (!user || !user.userId) {
+            $("#user-table tbody").html(`<tr><td colspan="2">Profil tidak ditemukan.</td></tr>`);
             return;
         }
-        const rows = users.map(user => `
+        $("#user-table tbody").html(`
             <tr>
-            <td>${user.userId ?? "-"}</td>
-            <td>${user.email ?? "-"}</td>
+                <td>${user.fullname ?? user.username ?? "-"}</td>
+                <td>${user.email ?? "-"}</td>
             </tr>
-        `).join("");
-        $("#user-table tbody").html(rows);
-        }
+        `);
+    }
 
-        function handleFetchError(xhr) {
+    function handleFetchError(xhr) {
         if (xhr.status === 401) {
             alert("Sesi tidak valid, silakan login.");
             window.location.href = "/login.html";
             return;
         }
-        $("#user-table tbody").html(`<tr><td colspan="3">Gagal memuat (${xhr.status}).</td></tr>`);
+        $("#user-table tbody").html(`<tr><td colspan="2">Gagal memuat (${xhr.status}).</td></tr>`);
         console.error("Load users failed:", xhr.responseText);
     }
 

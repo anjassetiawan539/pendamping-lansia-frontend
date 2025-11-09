@@ -1,5 +1,4 @@
-// Gunakan URL API dari serverapp di sini
-// const API_BASE_URL = "http://localhost:8081/api/auth";
+const API_BASE_URL = "http://localhost:9000/api/auth";
 
 $(document).ready(function () {
 
@@ -29,21 +28,23 @@ $(document).ready(function () {
 
             success: function (response) {
                 // Simpan token dan role
+                const role = (response.role || "").toLowerCase();
                 localStorage.setItem('authToken', response.token);
-                localStorage.setItem('userRole', response.role);
+                localStorage.setItem('userRole', role);
 
                 // Arahkan berdasarkan role
-                if (response.role === "keluarga") {
+                if (role === "keluarga") {
                     window.location.href = "/dashboard-keluarga.html";
-                } else if (response.role === "relawan") {
+                } else if (role === "relawan") {
                     window.location.href = "/dashboard-relawan.html"; // (Buat file ini nanti)
-                } else if (response.role === "admin") {
+                } else if (role === "admin") {
                     window.location.href = "/dashboard-admin.html"; // (Buat file ini nanti)
                 }
             },
             error: function (xhr) {
                 // Tampilkan pesan error
-                $("#login-error").text("Login gagal! Email atau password salah.").removeClass('d-none');
+                const msg = xhr.responseJSON?.message || "Login gagal! Email atau password salah.";
+                $("#login-error").text(msg).removeClass('d-none');
             }
         });
     });
@@ -79,7 +80,8 @@ $(document).ready(function () {
             },
             error: function (xhr) {
                 // Tampilkan pesan error
-                $("#register-error").text(xhr.responseJSON.message || "Pendaftaran gagal.").removeClass('d-none');
+                const msg = xhr.responseJSON?.message || "Pendaftaran gagal.";
+                $("#register-error").text(msg).removeClass('d-none');
             }
         });
     });

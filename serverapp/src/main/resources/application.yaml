@@ -17,3 +17,9 @@ spring:
 
 server:
   port: 9000
+
+app:
+  jwt:
+    # Ganti secret untuk produksi!
+    secret: TGVnYVBhc3N3b3JkU3VwZXJTZWNyZXQxMjM0NTY=
+    expiration-ms: 86400000
