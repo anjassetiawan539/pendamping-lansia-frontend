@@ -10,15 +10,13 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.temanlansiabe.temanlansia_backend.Dto.AssignmentActionRequest;
 import com.temanlansiabe.temanlansia_backend.Dto.AssignmentDto;
 import com.temanlansiabe.temanlansia_backend.Model.Assignment;
-import com.temanlansiabe.temanlansia_backend.Model.Request;
-import com.temanlansiabe.temanlansia_backend.Model.User;
 import com.temanlansiabe.temanlansia_backend.Service.AssignmentService;
 
 import jakarta.validation.Valid;
@@ -43,13 +41,8 @@ public class AssignmentController {
 
     @PostMapping
     public ResponseEntity<?> create(@Valid @RequestBody AssignmentDto dto) {
-        Assignment saved = assignmentService.create(toEntity(dto));
+        Assignment saved = assignmentService.assign(dto.getRequestId(), dto.getVolunteerUserId());
         return ResponseEntity.status(HttpStatus.CREATED).body(Map.of("message", "Assignment created", "data", saved));
-    }
-
-    @PutMapping("/{id}")
-    public Assignment update(@PathVariable Integer id, @Valid @RequestBody AssignmentDto dto) {
-        return assignmentService.update(id, toEntity(dto));
     }
 
     @DeleteMapping("/{id}")
@@ -68,23 +61,31 @@ public class AssignmentController {
         return assignmentService.getByRequestId(requestId);
     }
 
-    private Assignment toEntity(AssignmentDto dto) {
-        Assignment assignment = new Assignment();
-        assignment.setRequest(requestRef(dto.getRequestId()));
-        assignment.setVolunteer(userRef(dto.getVolunteerUserId()));
-        assignment.setStatus(dto.getStatus());
-        return assignment;
+    @PostMapping("/{assignmentId}/accept")
+    public ResponseEntity<?> accept(
+        @PathVariable Integer assignmentId,
+        @Valid @RequestBody AssignmentActionRequest dto
+    ) {
+        Assignment updated = assignmentService.accept(assignmentId, dto.getVolunteerUserId());
+        return ResponseEntity.ok(Map.of("message", "Assignment accepted", "data", updated));
     }
 
-    private Request requestRef(Integer requestId) {
-        Request request = new Request();
-        request.setRequestId(requestId);
-        return request;
+    @PostMapping("/{assignmentId}/start")
+    public ResponseEntity<?> start(
+        @PathVariable Integer assignmentId,
+        @Valid @RequestBody AssignmentActionRequest dto
+    ) {
+        Assignment updated = assignmentService.start(assignmentId, dto.getVolunteerUserId());
+        return ResponseEntity.ok(Map.of("message", "Assignment started", "data", updated));
     }
 
-    private User userRef(Integer userId) {
-        User user = new User();
-        user.setUserId(userId);
-        return user;
+    @PostMapping("/{assignmentId}/complete")
+    public ResponseEntity<?> complete(
+        @PathVariable Integer assignmentId,
+        @Valid @RequestBody AssignmentActionRequest dto
+    ) {
+        Assignment updated = assignmentService.complete(assignmentId, dto.getVolunteerUserId());
+        return ResponseEntity.ok(Map.of("message", "Assignment completed", "data", updated));
     }
+
 }

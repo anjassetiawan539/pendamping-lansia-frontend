@@ -8,10 +8,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AssignmentDto {
-
-    @NotNull
-    private Integer requestId;
+public class AssignmentActionRequest {
 
     @NotNull
     private Integer volunteerUserId;

@@ -64,6 +64,7 @@ public class Assignment {
 
     public enum Status {
         SCHEDULED,
+        ACCEPTED,
         IN_PROGRESS,
         COMPLETE,
         CANCELLED
