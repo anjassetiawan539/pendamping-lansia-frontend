@@ -10,7 +10,7 @@
                 <div class="card-body p-4 p-md-5">
                     <h3 class="card-title text-center mb-4 text-white"><strong>Daftar Akun Baru</strong></h3>
                     <p class="text-center text-white-50 mb-4">Bergabunglah sebagai Keluarga atau Relawan</p>
-                    <form id="register-form">
+                    <form id="register-form" novalidate>
                         <div id="register-error" class="alert alert-danger d-none" role="alert"></div>
                         <div class="mb-3">
                             <label for="register-role" class="form-label text-white-50">Saya ingin mendaftar sebagai:</label>
@@ -20,8 +20,18 @@
                             </select>
                         </div>
                         <div class="mb-3">
+                            <label for="register-username" class="form-label text-white-50">Username</label>
+                            <input
+                                type="text"
+                                class="form-control dark-input-custom"
+                                id="register-username"
+                                required
+                            >
+                            <div class="form-text text-white-50">Wajib diisi. Gunakan nama unik Anda.</div>
+                        </div>
+                        <div class="mb-3">
                             <label for="register-fullname" class="form-label text-white-50">Nama Lengkap</label>
-                            <input type="text" class="form-control dark-input-custom" id="register-fullname" required>
+                            <input type="text" class="form-control dark-input-custom" id="register-fullname" placeholder="Opsional">
                         </div>
                         <div class="mb-3">
                             <label for="register-email" class="form-label text-white-50">Email</label>
@@ -29,17 +39,37 @@
                         </div>
                         <div class="mb-3">
                             <label for="register-phone" class="form-label text-white-50">Nomor Telepon</label>
-                            <input type="tel" class="form-control dark-input-custom" id="register-phone" required>
+                            <input
+                                type="tel"
+                                class="form-control dark-input-custom"
+                                id="register-phone"
+                                placeholder="Opsional"
+                            >
+                        </div>
+                        <div class="mb-3">
+                            <label for="register-province" class="form-label text-white-50">Provinsi</label>
+                            <input type="text" class="form-control dark-input-custom" id="register-province" placeholder="Opsional">
+                        </div>
+                        <div class="mb-3">
+                            <label for="register-city" class="form-label text-white-50">Kota/Kabupaten</label>
+                            <input type="text" class="form-control dark-input-custom" id="register-city" placeholder="Opsional">
+                        </div>
+                        <div class="mb-3">
+                            <label for="register-address" class="form-label text-white-50">Detail Alamat</label>
+                            <textarea class="form-control dark-input-custom" id="register-address" rows="2" placeholder="Opsional"></textarea>
+                        </div>
+                        <div class="mb-3">
+                            <label for="register-bio" class="form-label text-white-50">Bio</label>
+                            <textarea class="form-control dark-input-custom" id="register-bio" rows="2" placeholder="Opsional"></textarea>
                         </div>
                         <div class="mb-4">
                             <label for="register-password" class="form-label text-white-50">Password</label>
                             <div class="input-group">
-                                <input type="password" class="form-control dark-input-custom" id="register-password" required minlength="8">
+                                <input type="password" class="form-control dark-input-custom" id="register-password" required>
                                 <button class="btn btn-outline-secondary toggle-password dark-btn-outline" type="button">
                                     <i class="bi bi-eye-slash text-white-50"></i>
                                 </button>
                             </div>
-                            <div class="form-text text-white-50">Minimal 8 karakter.</div>
                         </div>
                         <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">Daftar Akun</button>
                         <div class="text-center">

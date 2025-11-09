@@ -35,16 +35,32 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<AuthResponse> register(@Valid @RequestBody AuthRegisterRequest request) {
-        if (userRepository.existsByEmail(request.getEmail()) || userRepository.existsByUsername(request.getEmail())) {
+        String sanitizedEmail = request.getEmail().trim().toLowerCase();
+        String sanitizedUsername = request.getUsername().trim();
+        String sanitizedPhone = normalizeOptional(request.getPhone());
+        String sanitizedFullname = normalizeOptional(request.getFullname());
+        String sanitizedProvince = normalizeOptional(request.getProvince());
+        String sanitizedCity = normalizeOptional(request.getCity());
+        String sanitizedAddress = normalizeOptional(request.getAddressDetail());
+        String sanitizedBio = normalizeOptional(request.getBio());
+
+        if (userRepository.existsByEmail(sanitizedEmail)) {
             throw new ResponseStatusException(HttpStatus.CONFLICT, "Email sudah terdaftar");
+        }
+        if (userRepository.existsByUsername(sanitizedUsername)) {
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username sudah terpakai");
         }
 
         User user = new User();
-        user.setUsername(request.getEmail());
-        user.setEmail(request.getEmail());
+        user.setUsername(sanitizedUsername);
+        user.setEmail(sanitizedEmail);
         user.setPassword(request.getPassword());
-        user.setFullname(request.getFullname());
-        user.setPhone(request.getPhone());
+        user.setFullname(sanitizedFullname);
+        user.setPhone(sanitizedPhone);
+        user.setProvince(sanitizedProvince);
+        user.setCity(sanitizedCity);
+        user.setAddressDetail(sanitizedAddress);
+        user.setBio(sanitizedBio);
         user.setRole(mapRole(request.getRole()));
 
         User saved = userService.create(user);
@@ -72,12 +88,23 @@ public class AuthController {
     }
 
     private User.Role mapRole(String roleInput) {
+        if (roleInput == null) {
+            return User.Role.LANSIA;
+        }
         String normalized = roleInput.trim().toLowerCase();
         return switch (normalized) {
             case "admin" -> User.Role.ADMIN;
             case "relawan" -> User.Role.RELAWAN;
             default -> User.Role.LANSIA;
         };
+    }
+
+    private String normalizeOptional(String value) {
+        if (value == null) {
+            return null;
+        }
+        String trimmed = value.trim();
+        return trimmed.isEmpty() ? null : trimmed;
     }
 
     private String toClientRole(User.Role role) {

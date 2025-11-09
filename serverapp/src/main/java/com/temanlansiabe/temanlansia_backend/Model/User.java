@@ -19,7 +19,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.Pattern;
 import lombok.NoArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -53,10 +52,6 @@ public class User {
     @Column(name = "fullname", length = 50)
     private String fullname;
 
-    @Pattern(
-        regexp = "^(\\\\+62|62|0)8[1-9][0-9]{6,9}$", 
-        message = "Nomor telepon harus format Indonesia, misal 0812xx atau +62812xx atau 62812xx"
-    )
     @Column(name = "phone" )
     private String phone;
 

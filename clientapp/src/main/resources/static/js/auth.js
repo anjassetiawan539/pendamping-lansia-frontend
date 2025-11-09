@@ -1,6 +1,91 @@
 const API_BASE_URL = "http://localhost:9000/api/auth";
 
 const unwrapResponse = (response) => (response && typeof response === "object" && "data" in response ? response.data : response);
+const hideError = (selector) => $(selector).addClass("d-none").text("");
+const showError = (selector, message) => $(selector).text(message).removeClass("d-none");
+const extractErrorMessage = (xhr, fallback) => {
+    if (!xhr) {
+        return fallback;
+    }
+    const payload = xhr.responseJSON;
+    if (!payload) {
+        return fallback;
+    }
+    if (typeof payload === "string" && payload.trim().length > 0) {
+        return payload;
+    }
+    const messageCandidates = [
+        payload.message,
+        payload.detail,
+        payload.error,
+    ];
+    for (const msg of messageCandidates) {
+        if (typeof msg === "string" && msg.trim().length > 0) {
+            return msg;
+        }
+    }
+    if (payload.errors) {
+        if (Array.isArray(payload.errors) && payload.errors.length > 0) {
+            const firstError = payload.errors[0];
+            if (typeof firstError === "string") {
+                return firstError;
+            }
+            if (firstError?.defaultMessage) {
+                return firstError.defaultMessage;
+            }
+            if (typeof firstError?.message === "string") {
+                return firstError.message;
+            }
+        } else if (typeof payload.errors === "object") {
+            const firstKey = Object.keys(payload.errors)[0];
+            if (firstKey) {
+                const messages = payload.errors[firstKey];
+                if (Array.isArray(messages) && messages.length > 0) {
+                    return messages[0];
+                }
+                if (typeof messages === "string" && messages.trim().length > 0) {
+                    return messages;
+                }
+            }
+        }
+    }
+    if (payload.data && typeof payload.data === "string" && payload.data.trim().length > 0) {
+        return payload.data;
+    }
+    return fallback;
+};
+
+const isBlank = (value) => !value || !value.trim();
+const normalizeOptional = (value) => {
+    if (value === undefined || value === null) {
+        return null;
+    }
+    const trimmed = value.trim();
+    return trimmed.length === 0 ? null : trimmed;
+};
+
+const validateLoginPayload = ({ email, password }) => {
+    if (isBlank(email) || isBlank(password)) {
+        return "Email dan password wajib diisi.";
+    }
+    return null;
+};
+
+const validateRegisterPayload = ({ username, email, password, role }) => {
+    if (isBlank(role)) {
+        return "Silakan pilih peran pendaftaran.";
+    }
+    if (isBlank(username)) {
+        return "Username wajib diisi.";
+    }
+    if (isBlank(email)) {
+        return "Email wajib diisi.";
+    }
+    if (isBlank(password)) {
+        return "Password wajib diisi.";
+    }
+    return null;
+};
 
 $(document).ready(function () {
 
@@ -10,15 +95,19 @@ $(document).ready(function () {
     $("#login-form").submit(function (event) {
         // Mencegah reload halaman
         event.preventDefault();
-        $("#login-error").addClass('d-none').text("");
+        hideError("#login-error");
 
         // Ambil data
-        var email = $("#login-email").val();
-        var password = $("#login-password").val();
-        var formData = {
-            email: email,
-            password: password
+        const formData = {
+            email: ($("#login-email").val() || "").trim(),
+            password: $("#login-password").val() || ""
         };
+
+        const validationError = validateLoginPayload(formData);
+        if (validationError) {
+            showError("#login-error", validationError);
+            return;
+        }
 
         // Kirim AJAX ke serverapp
         $.ajax({
@@ -51,8 +140,8 @@ $(document).ready(function () {
             },
             error: function (xhr) {
                 // Tampilkan pesan error
-                const msg = xhr.responseJSON?.message || "Login gagal! Email atau password salah.";
-                $("#login-error").text(msg).removeClass('d-none');
+                const msg = extractErrorMessage(xhr, "Login gagal! Email atau password salah.");
+                showError("#login-error", msg);
             }
         });
     });
@@ -62,16 +151,27 @@ $(document).ready(function () {
     // =======================================
     $("#register-form").submit(function (event) {
         event.preventDefault();
-        $("#register-error").addClass('d-none').text("");
+        hideError("#register-error");
 
         // Ambil data dari form register
-        var formData = {
-            fullname: $("#register-fullname").val(),
-            email: $("#register-email").val(),
-            phone: $("#register-phone").val(),
-            password: $("#register-password").val(),
-            role: $("#register-role").val()
+        const formData = {
+            username: ($("#register-username").val() || "").trim(),
+            email: ($("#register-email").val() || "").trim(),
+            password: $("#register-password").val() || "",
+            role: ($("#register-role").val() || "").trim().toLowerCase(),
+            fullname: normalizeOptional($("#register-fullname").val() || ""),
+            phone: normalizeOptional($("#register-phone").val() || ""),
+            province: normalizeOptional($("#register-province").val() || ""),
+            city: normalizeOptional($("#register-city").val() || ""),
+            addressDetail: normalizeOptional($("#register-address").val() || ""),
+            bio: normalizeOptional($("#register-bio").val() || "")
         };
+
+        const registerError = validateRegisterPayload(formData);
+        if (registerError) {
+            showError("#register-error", registerError);
+            return;
+        }
 
         // Kirim AJAX ke serverapp
         $.ajax({
@@ -87,8 +187,8 @@ $(document).ready(function () {
             },
             error: function (xhr) {
                 // Tampilkan pesan error
-                const msg = xhr.responseJSON?.message || "Pendaftaran gagal.";
-                $("#register-error").text(msg).removeClass('d-none');
+                const msg = extractErrorMessage(xhr, "Pendaftaran gagal.");
+                showError("#register-error", msg);
             }
         });
     });

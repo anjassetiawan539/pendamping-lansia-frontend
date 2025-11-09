@@ -21,5 +21,5 @@ server:
 app:
   jwt:
     # Ganti secret untuk produksi!
-    secret: TGVnYVBhc3N3b3JkU3VwZXJTZWNyZXQxMjM0NTY=
+    secret: 177cktj1e2/dLgckDyzIF8GoYubng3KHksAbU5rl3y8=
     expiration-ms: 86400000
