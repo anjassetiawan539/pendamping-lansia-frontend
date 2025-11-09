@@ -1,5 +1,6 @@
 package com.temanlansiabe.temanlansia_backend.Service;
 
+import java.time.Instant;
 import java.util.List;
 
 import org.springframework.http.HttpStatus;
@@ -63,9 +64,12 @@ public class AssignmentService {
         Assignment assignment = getById(assignmentId);
         ensureVolunteerOwnership(assignment, volunteerUserId);
         ensureAssignmentStatus(assignment, Status.SCHEDULED, "Assignment tidak dapat diterima");
-        ensureRequestStatus(assignment.getRequest(), StatusType.ASSIGNED, "Status request tidak valid untuk accept");
+        Request request = assignment.getRequest();
+        ensureRequestStatus(request, StatusType.ASSIGNED, "Status request tidak valid untuk accept");
 
         assignment.setStatus(Status.ACCEPTED);
+        request.setAcceptedAt(Instant.now());
+        requestRepository.save(request);
         return assignmentRepository.save(assignment);
     }
 
@@ -79,6 +83,7 @@ public class AssignmentService {
 
         assignment.setStatus(Status.IN_PROGRESS);
         request.setStatus(StatusType.ON_GOING);
+        request.setStartedAt(Instant.now());
 
         requestRepository.save(request);
         return assignmentRepository.save(assignment);
@@ -94,6 +99,7 @@ public class AssignmentService {
 
         assignment.setStatus(Status.COMPLETE);
         request.setStatus(StatusType.DONE);
+        request.setCompletedAt(Instant.now());
 
         requestRepository.save(request);
         return assignmentRepository.save(assignment);

@@ -84,6 +84,15 @@ public class Request {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
+    @Column(name = "accepted_at")
+    private Instant acceptedAt;
+
+    @Column(name = "started_at")
+    private Instant startedAt;
+
+    @Column(name = "completed_at")
+    private Instant completedAt;
+
     public enum StatusType {
         OFFERED,
         ASSIGNED,
