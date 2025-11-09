@@ -7,17 +7,51 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class ViewController {
 
     /**
-     * Ini adalah metode untuk menangani URL root ("/").
-     * Saat seseorang mengunjungi "http://localhost:8080/",
-     * metode ini akan berjalan.
+     * Endpoint Utama (/)
+     * Mengarahkan ke Dashboard Lansia sebagai halaman default,
+     * yang akan memicu pemuatan dashboard_layout.html.
      */
     @GetMapping("/")
-    public String rootRedirect() {
-        
-        // "redirect:/index.html"
-        // Ini adalah perintah untuk memberitahu browser:
-        // "Tolong alihkan pengguna ke file statis /index.html"
-        
-        return "redirect:/index.html";
+    public String showDefaultDashboard() {
+        return "index.html";
+    }
+
+    @GetMapping("/dashboard_layout")
+    public String showLayoutDashboard() {
+        return "dashboard_layout";
+    }
+
+
+    // -------------------------------------------------------------------------
+    // ENDPOINT DASHBOARD
+    // -------------------------------------------------------------------------
+
+    /**
+     * Endpoint untuk Dashboard Lansia
+     */
+    @GetMapping("/dashboard-lansia")
+    public String showLansiaDashboard() {
+        return "folder_dashboard/dashboard_lansia";
+    }
+
+    /**
+     * Endpoint untuk Dashboard Relawan
+     */
+    @GetMapping("/dashboard-relawan")
+    public String showRelawanDashboard() {
+        return "folder_dashboard/dashboard_relawan";
+    }
+
+    // -------------------------------------------------------------------------
+    // ENDPOINT UTILITY
+    // -------------------------------------------------------------------------
+
+    /**
+     * Endpoint untuk Halaman Login
+     * (Asumsi ada file login.html di src/main/resources/templates/)
+     */
+    @GetMapping("/login")
+    public String showLogin() {
+        return "login";
     }
 }

@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org"
+    th:replace="dashboard_layout :: html(title='Dashboard Lansia', content = ~{::content})">
+
+<head></head>
+
+<body>
+    <div th:fragment="content">
+        <h1 class="mb-4">Selamat Datang, Lansia!</h1>
+        <div class="alert alert-success">Sistem layout Thymeleaf berhasil diterapkan!</div>
+        <p>Anda dapat memasukkan semua fitur unik lansia di sini.</p>
+    </div>
+</body>
+
+</html>
