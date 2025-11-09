@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.temanlansiabe.temanlansia_backend.Dto.UserRequestDto;
+import com.temanlansiabe.temanlansia_backend.Dto.UserUpdateDto;
 import com.temanlansiabe.temanlansia_backend.Model.User;
 import com.temanlansiabe.temanlansia_backend.Service.UserService;
 
@@ -48,8 +49,8 @@ public class UserController {
 
     // update
     @PutMapping("/{id}")
-    public User update(@PathVariable Integer id, @Valid @RequestBody UserRequestDto dto){
-        return userService.update(id, toEntity(dto));
+    public User update(@PathVariable Integer id, @Valid @RequestBody UserUpdateDto dto){
+        return userService.updatePartial(id, dto);
     }
 
     // delete
