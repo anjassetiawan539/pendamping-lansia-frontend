@@ -130,7 +130,9 @@ $(document).ready(function () {
                     localStorage.setItem('userId', payload.userId);
                 }
 
-                if (role === "relawan") {
+                if (role === "admin") {
+                    window.location.href = "/dashboard/admin";
+                } else if (role === "relawan") {
                     window.location.href = "/dashboard/relawan";
                 } else if (role === "keluarga" || role === "lansia") {
                     window.location.href = "/dashboard/lansia";

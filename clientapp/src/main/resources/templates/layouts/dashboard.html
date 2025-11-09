@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id" xmlns:th="http://www.thymeleaf.org" th:fragment="layout (title='Dashboard', content)">
+<html lang="id" xmlns:th="http://www.thymeleaf.org" th:fragment="layout (title='Dashboard', content, role='lansia', menuTitle='Dashboard')">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,14 +10,19 @@
     <script defer th:src="@{https://code.jquery.com/jquery-3.7.1.min.js}"></script>
     <script defer th:src="@{https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js}"></script>
 </head>
-<body>
-    <div th:replace="fragments/navbar :: main-nav"></div>
-    <div id="dashboard-wrapper" class="d-flex" style="min-height: calc(100vh - 100px);">
-        <div th:replace="fragments/sidebar :: main-sidebar"></div>
-        <main id="dashboard-content" class="flex-grow-1 p-3">
+<body class="bg-light">
+    <nav class="navbar navbar-dark bg-dark shadow-sm">
+        <div class="container-fluid justify-content-between">
+            <a class="navbar-brand fw-bold" th:href="@{/}">Teman Lansia</a>
+            <span class="navbar-text text-white fw-semibold" th:text="${menuTitle}">Dashboard</span>
+        </div>
+    </nav>
+    <div id="dashboard-wrapper" class="d-flex" th:attr="data-role=${role}" style="min-height: calc(100vh - 70px);">
+        <div th:replace="~{fragments/sidebar :: main-sidebar(${role}, ${menuTitle})}"></div>
+        <main id="dashboard-content" class="flex-grow-1 p-4">
             <div th:replace="${content}"></div>
         </main>
     </div>
-    <div th:insert="fragments/footer :: main-footer"></div>
+    <div th:insert="~{fragments/footer :: main-footer}"></div>
 </body>
 </html>

@@ -1,15 +1,81 @@
-<aside th:fragment="main-sidebar" class="bg-light sidebar border-end p-3" style="width: 220px;" xmlns:th="http://www.thymeleaf.org">
-    <h5 class="sidebar-heading text-primary">Menu Dashboard</h5>
-    <ul class="nav flex-column">
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{/dashboard/lansia}">
-                <i class="bi bi-person-wheelchair"></i> Dashboard Lansia
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" th:href="@{/dashboard/relawan}">
-                <i class="bi bi-heart"></i> Dashboard Relawan
-            </a>
-        </li>
+<aside th:fragment="main-sidebar (role, activeMenu='Dashboard')" class="bg-white border-end p-3" style="width: 230px;"
+    xmlns:th="http://www.thymeleaf.org">
+    <h6 class="text-uppercase text-muted small mb-3"
+        th:text="${role != null ? #strings.capitalize(role) + ' Menu' : 'Menu Dashboard'}">
+        Menu
+    </h6>
+
+    <ul class="nav flex-column gap-1">
+        <th:block th:switch="${role}">
+            <th:block th:case="'lansia'">
+                <li class="nav-item">
+                    <a class="nav-link rounded d-flex align-items-center gap-2"
+                        th:classappend="${activeMenu} == 'Dashboard' ? ' active text-primary fw-semibold bg-light' : ''"
+                        th:href="@{/dashboard/lansia}" th:attr="aria-current=${activeMenu} == 'Dashboard' ? 'page' : null">
+                        <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link rounded d-flex align-items-center gap-2"
+                        th:classappend="${activeMenu} == 'Req Layanan' ? ' active text-primary fw-semibold bg-light' : ''"
+                        th:href="@{/dashboard/lansia/req-layanan}"
+                        th:attr="aria-current=${activeMenu} == 'Req Layanan' ? 'page' : null">
+                        <i class="bi bi-list-check"></i> <span>Req Layanan</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link rounded d-flex align-items-center gap-2"
+                        th:classappend="${activeMenu} == 'Beri Rating dan Ulasan' ? ' active text-primary fw-semibold bg-light' : ''"
+                        th:href="@{/dashboard/lansia/beri-rating}"
+                        th:attr="aria-current=${activeMenu} == 'Beri Rating dan Ulasan' ? 'page' : null">
+                        <i class="bi bi-star"></i> <span>Beri Rating dan Ulasan</span>
+                    </a>
+                </li>
+            </th:block>
+
+            <th:block th:case="'relawan'">
+                <li class="nav-item">
+                    <a class="nav-link rounded d-flex align-items-center gap-2"
+                        th:classappend="${activeMenu} == 'Dashboard' ? ' active text-primary fw-semibold bg-light' : ''"
+                        th:href="@{/dashboard/relawan}" th:attr="aria-current=${activeMenu} == 'Dashboard' ? 'page' : null">
+                        <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link rounded d-flex align-items-center gap-2"
+                        th:classappend="${activeMenu} == 'Tugas Layanan' ? ' active text-primary fw-semibold bg-light' : ''"
+                        th:href="@{/dashboard/relawan/tugas-layanan}"
+                        th:attr="aria-current=${activeMenu} == 'Tugas Layanan' ? 'page' : null">
+                        <i class="bi bi-briefcase"></i> <span>Tugas Layanan</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link rounded d-flex align-items-center gap-2"
+                        th:classappend="${activeMenu} == 'Lihat Rating dan Ulasan' ? ' active text-primary fw-semibold bg-light' : ''"
+                        th:href="@{/dashboard/relawan/lihat-rating}"
+                        th:attr="aria-current=${activeMenu} == 'Lihat Rating dan Ulasan' ? 'page' : null">
+                        <i class="bi bi-star-half"></i> <span>Lihat Rating dan Ulasan</span>
+                    </a>
+                </li>
+            </th:block>
+
+            <th:block th:case="'admin'">
+                <li class="nav-item">
+                    <a class="nav-link rounded d-flex align-items-center gap-2"
+                        th:classappend="${activeMenu} == 'Dashboard' ? ' active text-primary fw-semibold bg-light' : ''"
+                        th:href="@{/dashboard/admin}" th:attr="aria-current=${activeMenu} == 'Dashboard' ? 'page' : null">
+                        <i class="bi bi-speedometer2"></i> <span>Dashboard</span>
+                    </a>
+                </li>
+            </th:block>
+
+            <th:block th:case="*">
+                <li class="nav-item">
+                    <div class="alert alert-warning p-2 mb-0">
+                        Role belum dikenali. Silakan login ulang.
+                    </div>
+                </li>
+            </th:block>
+        </th:block>
     </ul>
 </aside>
