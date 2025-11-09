@@ -52,7 +52,7 @@ public class Review {
         referencedColumnName = "request_id",
         foreignKey = @ForeignKey(name = "fk_review_request")
     )
-    private Request requestId;
+    private Request request;
 
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
     @JoinColumn(

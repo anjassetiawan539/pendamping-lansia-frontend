@@ -38,7 +38,7 @@ public class Assignment {
         referencedColumnName = "request_id",
         foreignKey = @ForeignKey(name = "fk_assignment_request")
     )
-    private Request requestId;
+    private Request request;
 
     @NotNull
     @ManyToOne(fetch = FetchType.LAZY, optional = false)
