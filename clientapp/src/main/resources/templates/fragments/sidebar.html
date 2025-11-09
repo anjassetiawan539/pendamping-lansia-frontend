@@ -1,19 +1,15 @@
-<html lang="id" xmlns:th="http://www.thymeleaf.org">
-<body>
-    <aside th:fragment="main-sidebar" class="bg-light sidebar border-end p-3" style="width: 200px;">
-        <h5 class="sidebar-heading text-primary">Menu Dashboard</h5>
-        <ul class="nav flex-column">
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/dashboard-lansia}">
-                    <i class="bi bi-person-wheelchair"></i> Dashboard Lansia
-                </a>
-            </li>
-            <li class="nav-item">
-                <a class="nav-link" th:href="@{/dashboard-relawan}">
-                    <i class="bi bi-heart"></i> Dashboard Relawan
-                </a>
-            </li>
-        </ul>
-    </aside>
-</body>
-</html>
+<aside th:fragment="main-sidebar" class="bg-light sidebar border-end p-3" style="width: 220px;" xmlns:th="http://www.thymeleaf.org">
+    <h5 class="sidebar-heading text-primary">Menu Dashboard</h5>
+    <ul class="nav flex-column">
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/dashboard/lansia}">
+                <i class="bi bi-person-wheelchair"></i> Dashboard Lansia
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" th:href="@{/dashboard/relawan}">
+                <i class="bi bi-heart"></i> Dashboard Relawan
+            </a>
+        </li>
+    </ul>
+</aside>

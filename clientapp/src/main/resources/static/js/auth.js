@@ -1,5 +1,7 @@
 const API_BASE_URL = "http://localhost:9000/api/auth";
 
+const unwrapResponse = (response) => (response && typeof response === "object" && "data" in response ? response.data : response);
+
 $(document).ready(function () {
 
     // ===================================
@@ -27,21 +29,24 @@ $(document).ready(function () {
             dataType: "json",
 
             success: function (response) {
-                // Simpan token dan role
-                const role = (response.role || "").toLowerCase();
-                localStorage.setItem('authToken', response.token);
+                const payload = unwrapResponse(response);
+                if (!payload) {
+                    $("#login-error").text("Login gagal! Coba beberapa saat lagi.").removeClass('d-none');
+                    return;
+                }
+                const role = (payload.role || "").toLowerCase();
+                localStorage.setItem('authToken', payload.token);
                 localStorage.setItem('userRole', role);
-                if (response.userId) {
-                    localStorage.setItem('userId', response.userId);
+                if (payload.userId) {
+                    localStorage.setItem('userId', payload.userId);
                 }
 
-                // Arahkan berdasarkan role
-                if (role === "keluarga") {
-                    window.location.href = "/dashboard-keluarga.html";
-                } else if (role === "relawan") {
-                    window.location.href = "/dashboard-relawan.html"; // (Buat file ini nanti)
-                } else if (role === "admin") {
-                    window.location.href = "/dashboard-admin.html"; // (Buat file ini nanti)
+                if (role === "relawan") {
+                    window.location.href = "/dashboard/relawan";
+                } else if (role === "keluarga" || role === "lansia") {
+                    window.location.href = "/dashboard/lansia";
+                } else {
+                    window.location.href = "/";
                 }
             },
             error: function (xhr) {
@@ -76,10 +81,9 @@ $(document).ready(function () {
             contentType: "application/json",
             dataType: "json",
 
-            success: function (response) {
-                // Jika register sukses, langsung arahkan ke login
+            success: function () {
                 alert("Pendaftaran berhasil! Silakan login.");
-                window.location.href = "/login.html";
+                window.location.href = "/login";
             },
             error: function (xhr) {
                 // Tampilkan pesan error

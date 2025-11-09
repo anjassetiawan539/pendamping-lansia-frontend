@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org" th:replace="layouts/public :: layout(~{::title}, ~{::content}, '')">
+<head>
+    <title>Daftar - Teman Nenek</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <div class="container d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 70px);">
+            <div class="card bg-dark border-0 register-card-custom" style="width: 30rem;">
+                <div class="card-body p-4 p-md-5">
+                    <h3 class="card-title text-center mb-4 text-white"><strong>Daftar Akun Baru</strong></h3>
+                    <p class="text-center text-white-50 mb-4">Bergabunglah sebagai Keluarga atau Relawan</p>
+                    <form id="register-form">
+                        <div id="register-error" class="alert alert-danger d-none" role="alert"></div>
+                        <div class="mb-3">
+                            <label for="register-role" class="form-label text-white-50">Saya ingin mendaftar sebagai:</label>
+                            <select class="form-select dark-input-custom" id="register-role" required>
+                                <option value="keluarga" selected>Keluarga (Membutuhkan Layanan)</option>
+                                <option value="relawan">Relawan (Ingin Membantu)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label for="register-fullname" class="form-label text-white-50">Nama Lengkap</label>
+                            <input type="text" class="form-control dark-input-custom" id="register-fullname" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="register-email" class="form-label text-white-50">Email</label>
+                            <input type="email" class="form-control dark-input-custom" id="register-email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="register-phone" class="form-label text-white-50">Nomor Telepon</label>
+                            <input type="tel" class="form-control dark-input-custom" id="register-phone" required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="register-password" class="form-label text-white-50">Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control dark-input-custom" id="register-password" required minlength="8">
+                                <button class="btn btn-outline-secondary toggle-password dark-btn-outline" type="button">
+                                    <i class="bi bi-eye-slash text-white-50"></i>
+                                </button>
+                            </div>
+                            <div class="form-text text-white-50">Minimal 8 karakter.</div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">Daftar Akun</button>
+                        <div class="text-center">
+                            <a th:href="@{/login}" class="d-block text-white-50 text-decoration-none">Sudah punya akun? <strong class="text-white">Masuk di sini</strong></a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <script defer th:src="@{/js/auth.js}"></script>
+    </div>
+</body>
+</html>

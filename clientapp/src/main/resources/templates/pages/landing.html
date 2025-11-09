@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org" th:replace="layouts/public :: layout(~{::title}, ~{::content}, '')">
+<head>
+    <title>Teman Nenek</title>
+</head>
+<body>
+    <div th:fragment="content">
+        <section id="beranda" class="full-height-hero d-flex align-items-center justify-content-center text-center">
+            <canvas id="particle-canvas"></canvas>
+            <div class="container">
+                <h1 id="main-heading" class="display-4 fw-bold gradient-text-animated">Ambil Peran, Dampingi Lansia</h1>
+                <p id="typed-text" class="lead" style="min-height: 1.5rem;"></p>
+                <a th:href="@{/register}" class="btn btn-primary btn-lg mt-3">Ajukan Permintaan Layanan</a>
+            </div>
+        </section>
+
+        <section id="about" class="container my-5 py-5">
+            <div class="row align-items-center">
+                <div class="col-md-6">
+                    <h2>Tentang Teman Lansia</h2>
+                    <p class="lead">Kami adalah platform yang menghubungkan relawan penuh kasih dengan lansia yang membutuhkan pendampingan.</p>
+                    <p>Misi kami adalah memastikan tidak ada lansia yang merasa kesepian dan semua kebutuhan dasar mereka terpenuhi dengan bantuan komunitas yang peduli.</p>
+                </div>
+                <div class="col-md-6 text-center">
+                    <i class="bi bi-people-fill" style="font-size: 10rem;"></i>
+                </div>
+            </div>
+        </section>
+
+        <section id="services-3d" class="banner d-flex align-items-center justify-content-center">
+            <div class="content">
+                <div class="author">
+                    <h2>Kategori Layanan</h2>
+                    <p>Jelajahi berbagai dukungan yang ditawarkan oleh relawan</p>
+                </div>
+            </div>
+            <div class="slider" id="service-slider">
+                <div class="item" style="--position: 1; --quantity: 4;">
+                    <div class="card service-card">
+                        <i class="bi bi-chat-dots fs-1"></i>
+                        <h5 class="card-title mt-3">Teman Ngobrol</h5>
+                        <p class="card-text">Pendampingan sosial untuk mengurangi rasa sepi.</p>
+                    </div>
+                </div>
+                <div class="item" style="--position: 2; --quantity: 4;">
+                    <div class="card service-card">
+                        <i class="bi bi-cart fs-1"></i>
+                        <h5 class="card-title mt-3">Bantu Belanja</h5>
+                        <p class="card-text">Bantuan membeli kebutuhan harian atau bulanan.</p>
+                    </div>
+                </div>
+                <div class="item" style="--position: 3; --quantity: 4;">
+                    <div class="card service-card">
+                        <i class="bi bi-prescription fs-1"></i>
+                        <h5 class="card-title mt-3">Antar Obat</h5>
+                        <p class="card-text">Mengambil resep atau mengantar obat ke rumah.</p>
+                    </div>
+                </div>
+                <div class="item" style="--position: 4; --quantity: 4;">
+                    <div class="card service-card">
+                        <i class="bi bi-person-wheelchair fs-1"></i>
+                        <h5 class="card-title mt-3">Antar ke Dokter</h5>
+                        <p class="card-text">Menemani dan mengantar ke jadwal medis.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="controls">
+                <button class="prev-btn" type="button"><i class="bi bi-arrow-left-circle-fill fs-2"></i></button>
+                <button class="next-btn" type="button"><i class="bi bi-arrow-right-circle-fill fs-2"></i></button>
+            </div>
+        </section>
+
+        <section id="contact" class="container my-5 py-5 rounded">
+            <h2 class="text-center mb-4">
+                Hubungi Kami <span class="contact-icon"><i class="bi bi-envelope-fill"></i></span>
+            </h2>
+            <div class="row">
+                <div class="col-md-6 mx-auto">
+                    <form>
+                        <div class="mb-3">
+                            <label for="contact-name" class="form-label">Nama Anda</label>
+                            <input type="text" class="form-control" id="contact-name">
+                        </div>
+                        <div class="mb-3">
+                            <label for="contact-email" class="form-label">Email Anda</label>
+                            <input type="email" class="form-control" id="contact-email">
+                        </div>
+                        <div class="mb-3">
+                            <label for="contact-message" class="form-label">Pesan</label>
+                            <textarea class="form-control" id="contact-message" rows="3"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Kirim Pesan</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const typedTextElement = document.getElementById('typed-text');
+                const textToType = "Ubah niat baik jadi aksi baik hari ini bersama Teman Nenek";
+                let index = 0;
+                const speed = 40;
+                function typeWriter() {
+                    if (index < textToType.length) {
+                        typedTextElement.innerHTML += textToType.charAt(index);
+                        index++;
+                        setTimeout(typeWriter, speed);
+                    }
+                }
+                typeWriter();
+            });
+        </script>
+
+        <script>
+            const canvas = document.getElementById("particle-canvas");
+            if (canvas) {
+                const ctx = canvas.getContext("2d");
+                let particlesArray = [];
+                const numParticles = 8;
+                function resizeCanvas() {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                }
+                window.addEventListener("resize", resizeCanvas);
+                resizeCanvas();
+                class Particle {
+                    constructor() {
+                        this.x = Math.random() * canvas.width;
+                        this.y = Math.random() * canvas.height;
+                        this.size = Math.random() * 0.3 + 0.5;
+                        this.speedX = (Math.random() - 0.5) * 0.4;
+                        this.speedY = (Math.random() - 0.5) * 0.4;
+                    }
+                    update() {
+                        this.x += this.speedX;
+                        this.y += this.speedY;
+                        if (this.x < 0 || this.x > canvas.width) this.speedX *= -1;
+                        if (this.y < 0 || this.y > canvas.height) this.speedY *= -1;
+                    }
+                    draw() {
+                        const glow = ctx.createRadialGradient(this.x, this.y, 0, this.x, this.y, this.size * 6);
+                        glow.addColorStop(0, "rgba(0,255,198,0.6)");
+                        glow.addColorStop(1, "rgba(0,255,198,0)");
+                        ctx.fillStyle = glow;
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size * 6, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+                function initParticles() {
+                    particlesArray = [];
+                    for (let i = 0; i < numParticles; i++) {
+                        particlesArray.push(new Particle());
+                    }
+                }
+                function animate() {
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    particlesArray.forEach((particle) => {
+                        particle.update();
+                        particle.draw();
+                    });
+                    requestAnimationFrame(animate);
+                }
+                initParticles();
+                animate();
+            }
+        </script>
+    </div>
+</body>
+</html>
