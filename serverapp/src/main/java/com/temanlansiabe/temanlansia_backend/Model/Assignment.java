@@ -1,43 +1,71 @@
 package com.temanlansiabe.temanlansia_backend.Model;
 
-import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.time.Instant;
 
-@Data
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
 @Entity
-@AllArgsConstructor
+@Table(name = "assignments",
+    uniqueConstraints = {
+        @UniqueConstraint(name = "uq_assignment_request", columnNames = "request_id")
+    }
+)
+@Getter @Setter
 @NoArgsConstructor
-@Table(name = "assignments")
+@EntityListeners(AuditingEntityListener.class)
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 public class Assignment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Integer id;
+    @Column(name = "assignment_id")
+    private Integer assignmentId;
 
-    @Column(name = "request_id", nullable = false) 
-    private Integer requestId;
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(
+        name = "request_id",
+        nullable = false,
+        referencedColumnName = "request_id",
+        foreignKey = @ForeignKey(name = "fk_assignment_request")
+    )
+    private Request request;
 
-    @Column(name = "user_id", nullable = false) // relawan id
-    private Integer userId; // relawan
+    @NotNull
+    @ManyToOne(fetch = FetchType.LAZY, optional = false)
+    @JoinColumn(
+        name = "volunteer_user_id",
+        nullable = false,
+        referencedColumnName = "user_id",
+        foreignKey = @ForeignKey(name = "fk_assignment_volunteer")
+    )
+    private User volunteer;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status", nullable = false)
     private Status status = Status.SCHEDULED;
 
-    // Relasi opsional — non-insertable/non-updatable agar FK dikontrol lewat requestId/userId
-    @ManyToOne
-    @JoinColumn(name = "request_id", insertable = false, updatable = false)
-    private Request request;
+    @CreatedDate
+    @Column(name = "created_at", nullable = false, updatable = false)
+    private Instant createdAt;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", insertable = false, updatable = false)
-    private User user;
+    @LastModifiedDate
+    @Column(name = "updated_at", nullable = false)
+    private Instant updatedAt;
 
     public enum Status {
         SCHEDULED,
         IN_PROGRESS,
-        COMPLETE
+        COMPLETE,
+        CANCELLED
     }
 }
