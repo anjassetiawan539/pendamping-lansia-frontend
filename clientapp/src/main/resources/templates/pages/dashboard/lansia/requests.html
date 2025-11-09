@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/dashboard :: layout('Permintaan Layanan', ~{::content}, 'lansia', 'Req Layanan')}">
+<head>
+    <title>Permintaan Layanan</title>
+</head>
+<body>
+<div th:fragment="content">
+    <div class="container-fluid px-2 px-lg-4 py-3">
+        <div class="mb-4">
+            <h3 class="fw-bold mb-1">Kelola Permintaan Layanan</h3>
+            <p class="text-muted mb-0">Buat permintaan baru dan pantau status layanan untuk lansia/keluarga Anda.</p>
+        </div>
+
+        <section class="card border-0 shadow-sm mb-4">
+            <div class="card-header bg-white">
+                <h5 class="mb-0"><i class="bi bi-plus-circle me-1"></i> Permintaan Baru</h5>
+            </div>
+            <div class="card-body">
+                <div id="request-feedback" class="d-none"></div>
+                <form id="request-form" class="row g-3">
+                    <div class="col-md-6">
+                        <label for="request-layanan" class="form-label">
+                            <i class="bi bi-briefcase"></i> Jenis Layanan
+                        </label>
+                        <select class="form-select" id="request-layanan" required>
+                            <option value="">Pilih layanan...</option>
+                            <option value="Belanja">Belanja</option>
+                            <option value="Memasak">Memasak</option>
+                            <option value="Membersihkan Rumah">Membersihkan Rumah</option>
+                            <option value="Menemani">Menemani</option>
+                            <option value="Antar Jemput">Antar Jemput</option>
+                            <option value="Konsultasi Kesehatan">Konsultasi Kesehatan</option>
+                            <option value="Lainnya">Lainnya</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="request-start-time" class="form-label">
+                            <i class="bi bi-clock"></i> Waktu Mulai
+                        </label>
+                        <input type="datetime-local" class="form-control" id="request-start-time" required>
+                    </div>
+                    <div class="col-md-3">
+                        <label for="request-duration" class="form-label">
+                            <i class="bi bi-hourglass"></i> Durasi (menit)
+                        </label>
+                        <input type="number" class="form-control" id="request-duration" placeholder="60" min="15" required>
+                    </div>
+                    <div class="col-12">
+                        <label for="request-deskripsi" class="form-label">
+                            <i class="bi bi-chat-left-text"></i> Deskripsi
+                        </label>
+                        <textarea class="form-control" id="request-deskripsi" rows="3" maxlength="500"
+                                  placeholder="Jelaskan kebutuhan Anda..." required></textarea>
+                    </div>
+                    <div class="col-12 text-end">
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-send"></i> Kirim Permintaan
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section class="card border-0 shadow-sm">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="mb-0"><i class="bi bi-list-ul me-1"></i> Permintaan Saya</h5>
+                    <small class="text-muted">Pantau status dan relawan yang membantu.</small>
+                </div>
+                <button class="btn btn-outline-primary btn-sm" onclick="refreshMyRequests()">
+                    <i class="bi bi-arrow-clockwise"></i> Refresh
+                </button>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover align-middle">
+                        <thead class="table-light">
+                        <tr>
+                            <th>ID</th>
+                            <th>Layanan</th>
+                            <th>Deskripsi</th>
+                            <th>Waktu Mulai</th>
+                            <th>Durasi</th>
+                            <th>Status</th>
+                            <th>Relawan</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody id="my-requests-body">
+                        <tr>
+                            <td colspan="8" class="text-center py-4">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script defer th:src="@{/js/api-service.js}"></script>
+    <script defer th:src="@{/js/dashboard-lansia.js}"></script>
+</div>
+</body>
+</html>

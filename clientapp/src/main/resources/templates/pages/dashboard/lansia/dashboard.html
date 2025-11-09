@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layouts/dashboard :: layout('Dashboard Lansia', ~{::content}, 'lansia', 'Dashboard')}">
+<head>
+    <title>Dashboard Lansia</title>
+</head>
+<body>
+<div th:fragment="content">
+    <div class="container-fluid px-2 px-lg-4 py-3">
+        <div class="row g-3 mb-4">
+            <div class="col-12">
+                <div class="card border-0 shadow-sm bg-primary text-white">
+                    <div class="card-body d-flex flex-column flex-md-row justify-content-between align-items-md-center">
+                        <div>
+                            <p class="text-uppercase small mb-1 opacity-75">Dashboard</p>
+                            <h3 class="fw-bold mb-1">Halo, <span id="lansia-hero-name">Sahabat</span></h3>
+                            <p class="mb-0">Kelola kebutuhan layanan lansia keluarga Anda bersama Teman Nenek.</p>
+                        </div>
+                        <div class="text-md-end text-white-50 mt-3 mt-md-0">
+                            <div><i class="bi bi-envelope"></i> <span id="lansia-hero-email">-</span></div>
+                            <div><i class="bi bi-telephone"></i> <span id="lansia-hero-phone">-</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <section class="card border-0 shadow-sm">
+            <div class="card-header bg-white d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="mb-0">Profil Akun</h5>
+                    <small class="text-muted">Informasi akun keluarga/lansia yang sedang login.</small>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table align-middle mb-0" id="user-table">
+                        <thead class="table-light">
+                        <tr>
+                            <th>Nama Lengkap</th>
+                            <th>Email</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td colspan="2" class="text-center py-4">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script defer th:src="@{/js/api-service.js}"></script>
+    <script defer th:src="@{/js/dashboard-lansia.js}"></script>
+</div>
+</body>
+</html>

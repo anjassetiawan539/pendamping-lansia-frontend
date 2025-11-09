@@ -17,17 +17,17 @@ public class ViewController {
     // =========================
     @GetMapping("/dashboard/lansia")
     public String showLansiaDashboard(Model model) {
-        return renderDashboard(model, "lansia", "Dashboard");
+        return renderLansiaPage(model, "Dashboard", "pages/dashboard/lansia/dashboard");
     }
 
     @GetMapping("/dashboard/lansia/req-layanan")
     public String showLansiaRequestMenu(Model model) {
-        return renderDashboard(model, "lansia", "Req Layanan");
+        return renderLansiaPage(model, "Req Layanan", "pages/dashboard/lansia/requests");
     }
 
     @GetMapping("/dashboard/lansia/beri-rating")
     public String showLansiaRatingMenu(Model model) {
-        return renderDashboard(model, "lansia", "Beri Rating dan Ulasan");
+        return renderLansiaPage(model, "Beri Rating dan Ulasan", "pages/dashboard/lansia/reviews");
     }
 
     // =========================
@@ -72,6 +72,13 @@ public class ViewController {
         model.addAttribute("pageTitle", buildPageTitle(role, menuTitle));
         model.addAttribute("menuMessage", "Ini adalah halaman Menu " + menuTitle + ".");
         return "pages/dashboard/menu-placeholder";
+    }
+
+    private String renderLansiaPage(Model model, String menuTitle, String viewName) {
+        model.addAttribute("role", "lansia");
+        model.addAttribute("menuTitle", menuTitle);
+        model.addAttribute("pageTitle", buildPageTitle("lansia", menuTitle));
+        return viewName;
     }
 
     private String buildPageTitle(String role, String menuTitle) {
