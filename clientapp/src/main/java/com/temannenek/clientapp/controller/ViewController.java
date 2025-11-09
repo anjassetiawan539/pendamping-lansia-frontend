@@ -52,8 +52,8 @@ public class ViewController {
     // DASHBOARD ADMIN
     // =========================
     @GetMapping("/dashboard/admin")
-    public String showAdminDashboard(Model model) {
-        return renderDashboard(model, "admin", "Dashboard");
+    public String showAdminDashboard() {
+        return "pages/dashboard/admin";
     }
 
     @GetMapping("/login")

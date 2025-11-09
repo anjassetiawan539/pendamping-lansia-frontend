@@ -1,12 +1,12 @@
 <aside th:fragment="main-sidebar (role, activeMenu='Dashboard')" class="bg-white border-end p-3" style="width: 230px;"
-    xmlns:th="http://www.thymeleaf.org">
+    xmlns:th="http://www.thymeleaf.org" th:with="roleKey=${role != null ? #strings.toLowerCase(role) : null}">
     <h6 class="text-uppercase text-muted small mb-3"
-        th:text="${role != null ? #strings.capitalize(role) + ' Menu' : 'Menu Dashboard'}">
+        th:text="${roleKey != null ? #strings.capitalize(roleKey) + ' Menu' : 'Menu Dashboard'}">
         Menu
     </h6>
 
     <ul class="nav flex-column gap-1">
-        <th:block th:switch="${role}">
+        <th:block th:switch="${roleKey}">
             <th:block th:case="'lansia'">
                 <li class="nav-item">
                     <a class="nav-link rounded d-flex align-items-center gap-2"
@@ -70,10 +70,8 @@
             </th:block>
 
             <th:block th:case="*">
-                <li class="nav-item">
-                    <div class="alert alert-warning p-2 mb-0">
-                        Role belum dikenali. Silakan login ulang.
-                    </div>
+                <li class="nav-item" th:if="${roleKey == null}">
+                    <span class="text-muted small ps-1">Menu belum tersedia untuk role ini.</span>
                 </li>
             </th:block>
         </th:block>

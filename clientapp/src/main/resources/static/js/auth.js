@@ -123,18 +123,29 @@ $(document).ready(function () {
                     $("#login-error").text("Login gagal! Coba beberapa saat lagi.").removeClass('d-none');
                     return;
                 }
-                const role = (payload.role || "").toLowerCase();
+                const normalizedRole = (payload.role || "").toUpperCase();
+                const navigationRole = normalizedRole.toLowerCase();
                 localStorage.setItem('authToken', payload.token);
-                localStorage.setItem('userRole', role);
+                localStorage.setItem('userRole', navigationRole);
                 if (payload.userId) {
                     localStorage.setItem('userId', payload.userId);
                 }
 
-                if (role === "admin") {
+                if (typeof SessionManager !== "undefined") {
+                    SessionManager.setUser({
+                        userId: payload.userId || null,
+                        username: payload.username || payload.email || "",
+                        email: payload.email || "",
+                        fullname: payload.fullname || payload.username || "",
+                        role: normalizedRole || "USER"
+                    });
+                }
+
+                if (navigationRole === "admin") {
                     window.location.href = "/dashboard/admin";
-                } else if (role === "relawan") {
+                } else if (navigationRole === "relawan") {
                     window.location.href = "/dashboard/relawan";
-                } else if (role === "keluarga" || role === "lansia") {
+                } else if (navigationRole === "keluarga" || navigationRole === "lansia") {
                     window.location.href = "/dashboard/lansia";
                 } else {
                     window.location.href = "/";
