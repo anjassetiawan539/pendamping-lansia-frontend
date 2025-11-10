@@ -5,6 +5,25 @@ class ApiService {
         this._sessionExpiredHandled = false;
     }
 
+    normalizeNumericId(value) {
+        if (value === undefined || value === null) {
+            return null;
+        }
+        const parsed = Number(value);
+        if (!Number.isFinite(parsed) || Number.isNaN(parsed) || !Number.isInteger(parsed)) {
+            return null;
+        }
+        return parsed;
+    }
+
+    ensureValidId(value, label = 'ID data') {
+        const normalized = this.normalizeNumericId(value);
+        if (normalized === null || normalized <= 0) {
+            throw new Error(`${label} tidak valid. Silakan muat ulang halaman dan coba lagi.`);
+        }
+        return normalized;
+    }
+
     getAuthToken() {
         if (typeof window === 'undefined') {
             return null;
@@ -205,18 +224,21 @@ class ApiService {
     }
 
     async getUserById(id) {
-        return this.request(`/user/${id}`);
+        const userId = this.ensureValidId(id, 'ID pengguna');
+        return this.request(`/user/${encodeURIComponent(userId)}`);
     }
 
     async updateUser(id, userData) {
-        return this.request(`/user/${id}`, {
+        const userId = this.ensureValidId(id, 'ID pengguna');
+        return this.request(`/user/${encodeURIComponent(userId)}`, {
             method: 'PUT',
             body: userData
         });
     }
 
     async deleteUser(id) {
-        return this.request(`/user/${id}`, {
+        const userId = this.ensureValidId(id, 'ID pengguna');
+        return this.request(`/user/${encodeURIComponent(userId)}`, {
             method: 'DELETE'
         });
     }
@@ -227,11 +249,13 @@ class ApiService {
     }
 
     async getRequestById(id) {
-        return this.request(`/request/${id}`);
+        const requestId = this.ensureValidId(id, 'ID request');
+        return this.request(`/request/${encodeURIComponent(requestId)}`);
     }
 
     async getRequestsByLansiaUserId(userId) {
-        return this.request(`/request/lansia/${userId}`);
+        const lansiaId = this.ensureValidId(userId, 'ID pengguna lansia');
+        return this.request(`/request/lansia/${encodeURIComponent(lansiaId)}`);
     }
 
     async createRequest(requestData) {
@@ -242,14 +266,16 @@ class ApiService {
     }
 
     async updateRequest(id, requestData) {
-        return this.request(`/request/${id}`, {
+        const requestId = this.ensureValidId(id, 'ID request');
+        return this.request(`/request/${encodeURIComponent(requestId)}`, {
             method: 'PUT',
             body: requestData
         });
     }
 
     async deleteRequest(id) {
-        return this.request(`/request/${id}`, {
+        const requestId = this.ensureValidId(id, 'ID request');
+        return this.request(`/request/${encodeURIComponent(requestId)}`, {
             method: 'DELETE'
         });
     }
@@ -260,47 +286,64 @@ class ApiService {
     }
 
     async getAssignmentById(id) {
-        return this.request(`/assignments/${id}`);
+        const assignmentId = this.ensureValidId(id, 'ID assignment');
+        return this.request(`/assignments/${encodeURIComponent(assignmentId)}`);
     }
 
     async getAssignmentsByRequestId(requestId) {
-        return this.request(`/assignments/request/${requestId}`);
+        const safeRequestId = this.ensureValidId(requestId, 'ID request');
+        return this.request(`/assignments/request/${encodeURIComponent(safeRequestId)}`);
     }
 
     async getAssignmentsByVolunteerId(volunteerId) {
-        return this.request(`/assignments/user/${volunteerId}`);
+        const safeVolunteerId = this.ensureValidId(volunteerId, 'ID relawan');
+        return this.request(`/assignments/user/${encodeURIComponent(safeVolunteerId)}`);
     }
 
     async createAssignment(assignmentData) {
+        if (!assignmentData || typeof assignmentData !== 'object') {
+            throw new Error('Data assignment tidak valid.');
+        }
+        const payload = {
+            requestId: this.ensureValidId(assignmentData.requestId, 'ID request'),
+            volunteerUserId: this.ensureValidId(assignmentData.volunteerUserId, 'ID relawan')
+        };
         return this.request('/assignments', {
             method: 'POST',
-            body: JSON.stringify(assignmentData)
+            body: JSON.stringify(payload)
         });
     }
 
     async acceptAssignment(assignmentId, volunteerUserId) {
-        return this.request(`/assignments/${assignmentId}/accept`, {
+        const safeAssignmentId = this.ensureValidId(assignmentId, 'ID assignment');
+        const safeVolunteer = this.ensureValidId(volunteerUserId, 'ID relawan');
+        return this.request(`/assignments/${encodeURIComponent(safeAssignmentId)}/accept`, {
             method: 'POST',
-            body: JSON.stringify({ volunteerUserId })
+            body: JSON.stringify({ volunteerUserId: safeVolunteer })
         });
     }
 
     async startAssignment(assignmentId, volunteerUserId) {
-        return this.request(`/assignments/${assignmentId}/start`, {
+        const safeAssignmentId = this.ensureValidId(assignmentId, 'ID assignment');
+        const safeVolunteer = this.ensureValidId(volunteerUserId, 'ID relawan');
+        return this.request(`/assignments/${encodeURIComponent(safeAssignmentId)}/start`, {
             method: 'POST',
-            body: JSON.stringify({ volunteerUserId })
+            body: JSON.stringify({ volunteerUserId: safeVolunteer })
         });
     }
 
     async completeAssignment(assignmentId, volunteerUserId) {
-        return this.request(`/assignments/${assignmentId}/complete`, {
+        const safeAssignmentId = this.ensureValidId(assignmentId, 'ID assignment');
+        const safeVolunteer = this.ensureValidId(volunteerUserId, 'ID relawan');
+        return this.request(`/assignments/${encodeURIComponent(safeAssignmentId)}/complete`, {
             method: 'POST',
-            body: JSON.stringify({ volunteerUserId })
+            body: JSON.stringify({ volunteerUserId: safeVolunteer })
         });
     }
 
     async deleteAssignment(id) {
-        return this.request(`/assignments/${id}`, {
+        const assignmentId = this.ensureValidId(id, 'ID assignment');
+        return this.request(`/assignments/${encodeURIComponent(assignmentId)}`, {
             method: 'DELETE'
         });
     }
@@ -311,15 +354,18 @@ class ApiService {
     }
 
     async getReviewById(id) {
-        return this.request(`/reviews/${id}`);
+        const reviewId = this.ensureValidId(id, 'ID ulasan');
+        return this.request(`/reviews/${encodeURIComponent(reviewId)}`);
     }
 
     async getReviewsByRequestId(requestId) {
-        return this.request(`/reviews/request/${requestId}`);
+        const safeRequestId = this.ensureValidId(requestId, 'ID request');
+        return this.request(`/reviews/request/${encodeURIComponent(safeRequestId)}`);
     }
 
     async getReviewsByUserId(userId) {
-        return this.request(`/reviews/user/${userId}`);
+        const safeUserId = this.ensureValidId(userId, 'ID pengguna');
+        return this.request(`/reviews/user/${encodeURIComponent(safeUserId)}`);
     }
 
     async createReview(reviewData) {
@@ -330,14 +376,16 @@ class ApiService {
     }
 
     async updateReview(id, reviewData) {
-        return this.request(`/reviews/${id}`, {
+        const reviewId = this.ensureValidId(id, 'ID ulasan');
+        return this.request(`/reviews/${encodeURIComponent(reviewId)}`, {
             method: 'PUT',
             body: JSON.stringify(reviewData)
         });
     }
 
     async deleteReview(id) {
-        return this.request(`/reviews/${id}`, {
+        const reviewId = this.ensureValidId(id, 'ID ulasan');
+        return this.request(`/reviews/${encodeURIComponent(reviewId)}`, {
             method: 'DELETE'
         });
     }
