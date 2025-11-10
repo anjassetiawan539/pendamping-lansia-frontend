@@ -110,9 +110,7 @@
                 }
                 typeWriter();
             });
-        </script>
 
-        <script>
             const canvas = document.getElementById("particle-canvas");
             if (canvas) {
                 const ctx = canvas.getContext("2d");
@@ -165,6 +163,45 @@
                 initParticles();
                 animate();
             }
+
+                 // ====================================
+        // 3. LOGIKA SLIDER 3D (Koreksi Koneksi Tombol)
+        // ====================================
+        const slider = document.getElementById('service-slider');
+        const prevBtn = document.querySelector('#services-3d .prev-btn');
+        const nextBtn = document.querySelector('#services-3d .next-btn');
+
+        if (slider && prevBtn && nextBtn) {
+            const items = document.querySelectorAll('#service-slider .item');
+            const quantity = items.length;
+
+            let currentRotation = 0;
+            const angle = 360 / quantity;
+
+            function updateRotation() {
+                slider.style.transition = 'transform 0.6s ease-in-out';
+                // Rotasi pada ELEMEN INDUK (.slider)
+                slider.style.transform = `perspective(1500px) rotateX(-10deg) rotateY(${currentRotation}deg)`;
+            }
+
+            // Fungsi Next (Mengurangi currentRotation = Putar ke Kanan)
+            nextBtn.addEventListener('click', function () {
+                currentRotation -= angle;
+                updateRotation();
+            });
+
+            // Fungsi Prev (Menambah currentRotation = Putar ke KIRI)
+            prevBtn.addEventListener('click', function () {
+                currentRotation += angle;
+                updateRotation();
+            });
+            
+            // Inisialisasi
+            updateRotation();
+        }
+
+
+
         </script>
     </div>
 </body>
