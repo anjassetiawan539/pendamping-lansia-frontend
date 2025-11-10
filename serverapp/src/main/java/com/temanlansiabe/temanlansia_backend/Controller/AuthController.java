@@ -76,12 +76,13 @@ public class AuthController {
 
     @PostMapping("/login")
     public AuthResponse login(@Valid @RequestBody AuthLoginRequest request) {
+        String username = request.getUsername().trim();
         Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+            new UsernamePasswordAuthenticationToken(username, request.getPassword())
         );
 
-        User user = userRepository.findByEmail(request.getEmail())
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Email atau password salah"));
+        User user = userRepository.findByUsername(username)
+            .orElseThrow(() -> new ResponseStatusException(HttpStatus.UNAUTHORIZED, "Username atau password salah"));
 
         String token = jwtService.generateToken((UserDetails) authentication.getPrincipal());
         return new AuthResponse(token, user.getUserId(), user.getEmail(), toClientRole(user.getRole()));

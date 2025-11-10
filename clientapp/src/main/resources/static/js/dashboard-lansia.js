@@ -16,6 +16,7 @@ $(document).ready(function () {
     if ($('#lansia-stats-wrapper').length) {
         hydrateDashboardStats(currentUserId);
     }
+    initProfileUpdateForm();
 
     if ($('#request-form').length || $('#my-requests-body').length) {
         initRequestSection(currentUserId);
@@ -49,14 +50,14 @@ $(document).ready(function () {
     }
 
     function populateProfileModal(user = {}) {
-        $('#profile-modal-username').text(escapeHtml(user.username));
-        $('#profile-modal-fullname').text(escapeHtml(user.fullname));
-        $('#profile-modal-email').text(escapeHtml(user.email));
-        $('#profile-modal-phone').text(escapeHtml(formatPhone(user.phone)));
-        $('#profile-modal-province').text(escapeHtml(user.province));
-        $('#profile-modal-city').text(escapeHtml(user.city));
-        $('#profile-modal-address').text(escapeHtml(user.addressDetail));
-        $('#profile-modal-bio').text(escapeHtml(user.bio));
+        $('#profile-modal-username').val(user.username || '');
+        $('#profile-modal-fullname').val(user.fullname || '');
+        $('#profile-modal-email').val(user.email || '');
+        $('#profile-modal-phone').val(user.phone || '');
+        $('#profile-modal-province').val(user.province || '');
+        $('#profile-modal-city').val(user.city || '');
+        $('#profile-modal-address').val(user.addressDetail || '');
+        $('#profile-modal-bio').val(user.bio || '');
     }
 
     async function hydrateDashboardStats(userId) {
@@ -101,6 +102,84 @@ $(document).ready(function () {
         $('#stat-assigned').text(counters.assigned);
         $('#stat-progress').text(counters.progress);
         $('#stat-completed').text(counters.completed);
+    }
+
+    function initProfileUpdateForm() {
+        const $form = $('#profile-update-form');
+        if (!$form.length) {
+            return;
+        }
+
+        const $success = $('#profile-update-success');
+        const $error = $('#profile-update-error');
+        const $submitBtn = $('#profile-update-submit');
+
+        $form.on('submit', async function (event) {
+            event.preventDefault();
+            resetProfileAlerts();
+
+            const payload = collectProfilePayload();
+            if (!payload) {
+                showProfileError('Mohon lengkapi username dan email.');
+                return;
+            }
+
+            setSubmitting(true);
+            try {
+                await apiService.updateUser(currentUserId, payload);
+                await hydrateProfile();
+                showProfileSuccess('Profil berhasil diperbarui.');
+            } catch (error) {
+                const message = error?.message || 'Gagal memperbarui profil. Coba lagi.';
+                showProfileError(message);
+            } finally {
+                setSubmitting(false);
+            }
+        });
+
+        function collectProfilePayload() {
+            const username = ($('#profile-modal-username').val() || '').trim();
+            const email = ($('#profile-modal-email').val() || '').trim();
+            if (!username || !email) {
+                return null;
+            }
+            return {
+                username,
+                email,
+                fullname: normalizeOptional($('#profile-modal-fullname').val()),
+                phone: normalizeOptional($('#profile-modal-phone').val()),
+                province: normalizeOptional($('#profile-modal-province').val()),
+                city: normalizeOptional($('#profile-modal-city').val()),
+                addressDetail: normalizeOptional($('#profile-modal-address').val()),
+                bio: normalizeOptional($('#profile-modal-bio').val())
+            };
+        }
+
+        function normalizeOptional(value) {
+            if (value === undefined || value === null) {
+                return null;
+            }
+            const trimmed = value.toString().trim();
+            return trimmed.length === 0 ? null : trimmed;
+        }
+
+        function resetProfileAlerts() {
+            $success.addClass('d-none').text('');
+            $error.addClass('d-none').text('');
+        }
+
+        function showProfileSuccess(message) {
+            $success.text(message).removeClass('d-none');
+        }
+
+        function showProfileError(message) {
+            $error.text(message).removeClass('d-none');
+        }
+
+        function setSubmitting(isSubmitting) {
+            $submitBtn.prop('disabled', isSubmitting);
+            $form.find('input, textarea').prop('disabled', isSubmitting);
+        }
     }
 });
 

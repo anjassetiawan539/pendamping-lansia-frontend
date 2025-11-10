@@ -64,9 +64,9 @@ const normalizeOptional = (value) => {
     return trimmed.length === 0 ? null : trimmed;
 };
 
-const validateLoginPayload = ({ email, password }) => {
-    if (isBlank(email) || isBlank(password)) {
-        return "Email dan password wajib diisi.";
+const validateLoginPayload = ({ username, password }) => {
+    if (isBlank(username) || isBlank(password)) {
+        return "Username dan password wajib diisi.";
     }
     return null;
 };
@@ -99,7 +99,7 @@ $(document).ready(function () {
 
         // Ambil data
         const formData = {
-            email: ($("#login-email").val() || "").trim(),
+            username: ($("#login-username").val() || "").trim(),
             password: $("#login-password").val() || ""
         };
 
@@ -153,7 +153,7 @@ $(document).ready(function () {
             },
             error: function (xhr) {
                 // Tampilkan pesan error
-                const msg = extractErrorMessage(xhr, "Login gagal! Email atau password salah.");
+                const msg = extractErrorMessage(xhr, "Login gagal! Username atau password salah.");
                 showError("#login-error", msg);
             }
         });
