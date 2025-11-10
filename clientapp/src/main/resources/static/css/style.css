@@ -30,6 +30,124 @@ Global Styles & Font
 
 
 
+/* ... (Kode CSS Global Variables dan Dark Mode di atas tidak diubah) ... */
+
+/* =================================================== */
+/* GLOBAL LIGHT MODE OVERRIDES */
+body.light-mode {
+    color: var(--light-text);
+    background: var(--light-bg-body) !important;
+}
+
+body.light-mode h1,
+body.light-mode h2,
+body.light-mode h3,
+body.light-mode h4,
+body.light-mode h5,
+body.light-mode h6 {
+    color: var(--light-text);
+}
+
+/* Navbar Light Mode */
+body.light-mode .navbar {
+    background-color: var(--light-surface) !important;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
+}
+body.light-mode .navbar-nav .nav-link {
+    /* Navbar link warna gelap saat Light Mode */
+    color: var(--light-text) !important; 
+}
+body.light-mode .navbar-brand img {
+    /* Logo glow dimatikan di light mode */
+    filter: none;
+}
+
+/* Hero Section Light Mode */
+body.light-mode #beranda {
+    background: var(--light-bg-body) !important;
+    background-image: none !important;
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
+}
+body.light-mode #beranda::before { /* Peta SVG */
+    opacity: 0.1;
+    filter: grayscale(100%);
+}
+body.light-mode .full-height-hero h1 {
+    /* Judul Hero menjadi warna aksen Teal */
+    color: var(--accent-color) !important; 
+    text-shadow: none;
+}
+body.light-mode .full-height-hero p.lead {
+    /* Subjudul Hero menjadi warna aksen Teal */
+    color: var(--accent-color) !important; 
+    text-shadow: none;
+}
+
+/* =================================================== */
+/* MODIFIKASI LIGHT MODE UNTUK SECTION LAIN */
+/* =================================================== */
+
+/* About Section Light Mode (#about) */
+body.light-mode #about,
+body.light-mode #contact {
+    background-color: var(--light-surface) !important;
+    color: var(--light-text);
+    border: 1px solid var(--light-border);
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Shadow ringan */
+}
+
+body.light-mode #about:hover,
+body.light-mode #contact:hover {
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+    border-color: var(--accent-color);
+}
+
+/* Teks dan Ikon Khusus di About */
+body.light-mode #about h2,
+body.light-mode #about p {
+    color: var(--light-text);
+}
+body.light-mode #about p.lead {
+    color: var(--accent-color); /* Lead text menggunakan aksen */
+}
+body.light-mode #about .bi-people-fill {
+    color: var(--accent-color); /* Ikon People menjadi warna aksen */
+    filter: none; /* HILANGKAN GLOW */
+}
+
+/* Services Section Light Mode (#services-3d) */
+body.light-mode #services-3d {
+    background: var(--light-bg-body) !important;
+    background-image: none !important; /* Hapus grid gelap */
+    mask-image: none !important;
+    -webkit-mask-image: none !important;
+}
+
+/* Card Layanan di Light Mode */
+body.light-mode #services-3d .card.service-card {
+    background-color: var(--light-surface) !important;
+    border: 1px solid var(--light-border);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+body.light-mode #services-3d .card.service-card .bi {
+    color: var(--accent-color); /* Ikon Layanan warna aksen */
+    filter: none; /* HILANGKAN GLOW */
+}
+body.light-mode #services-3d .card.service-card .card-title,
+body.light-mode #services-3d .card.service-card .card-text {
+    color: var(--light-text); /* Teks di card menjadi gelap */
+}
+
+/* Tombol Slider Kontrol di Light Mode */
+body.light-mode #services-3d .controls button i {
+    color: var(--light-text) !important; /* Ikon kontrol menjadi gelap */
+    filter: none; /* HILANGKAN GLOW */
+}
+
+/* ... (Kode CSS lainnya tidak diubah) ... */
+
+
 /* =================================================== */
 /* GLOBAL DARK MODE BASE */
 body {
