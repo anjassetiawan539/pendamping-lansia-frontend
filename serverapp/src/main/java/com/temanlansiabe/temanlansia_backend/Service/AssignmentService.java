@@ -3,6 +3,7 @@ package com.temanlansiabe.temanlansia_backend.Service;
 import java.time.Instant;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,13 +27,19 @@ public class AssignmentService {
     private final RequestRepository requestRepository;
     private final UserRepository userRepository;
 
+    @Transactional(readOnly = true)
     public List<Assignment> getAll() {
-        return assignmentRepository.findAll();
+        return assignmentRepository.findAll().stream()
+            .map(this::loadAssociations)
+            .toList();
     }
 
+    @Transactional(readOnly = true)
     public Assignment getById(Integer id) {
-        return assignmentRepository.findById(id)
-            .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Assignment not found"));
+        return loadAssociations(
+            assignmentRepository.findById(id)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Assignment not found"))
+        );
     }
 
     @Transactional
@@ -56,7 +63,7 @@ public class AssignmentService {
         Assignment saved = assignmentRepository.save(assignment);
         request.setStatus(StatusType.ASSIGNED);
         requestRepository.save(request);
-        return saved;
+        return loadAssociations(saved);
     }
 
     @Transactional
@@ -70,7 +77,8 @@ public class AssignmentService {
         assignment.setStatus(Status.ACCEPTED);
         request.setAcceptedAt(Instant.now());
         requestRepository.save(request);
-        return assignmentRepository.save(assignment);
+        Assignment updated = assignmentRepository.save(assignment);
+        return loadAssociations(updated);
     }
 
     @Transactional
@@ -86,7 +94,8 @@ public class AssignmentService {
         request.setStartedAt(Instant.now());
 
         requestRepository.save(request);
-        return assignmentRepository.save(assignment);
+        Assignment updated = assignmentRepository.save(assignment);
+        return loadAssociations(updated);
     }
 
     @Transactional
@@ -102,7 +111,8 @@ public class AssignmentService {
         request.setCompletedAt(Instant.now());
 
         requestRepository.save(request);
-        return assignmentRepository.save(assignment);
+        Assignment updated = assignmentRepository.save(assignment);
+        return loadAssociations(updated);
     }
 
     public void delete(Integer id) {
@@ -110,12 +120,18 @@ public class AssignmentService {
         assignmentRepository.delete(a);
     }
 
+    @Transactional(readOnly = true)
     public List<Assignment> getByUserId(Integer userId) {
-        return assignmentRepository.findByUserId(userId);
+        return assignmentRepository.findByUserId(userId).stream()
+            .map(this::loadAssociations)
+            .toList();
     }
 
+    @Transactional(readOnly = true)
     public List<Assignment> getByRequestId(Integer requestId) {
-        return assignmentRepository.findByRequestId(requestId);
+        return assignmentRepository.findByRequestId(requestId).stream()
+            .map(this::loadAssociations)
+            .toList();
     }
 
     private User fetchVolunteer(Integer volunteerUserId) {
@@ -143,5 +159,23 @@ public class AssignmentService {
         if (request.getStatus() != expected) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, message);
         }
+    }
+
+    private Assignment loadAssociations(Assignment assignment) {
+        if (assignment == null) {
+            return null;
+        }
+        Request request = assignment.getRequest();
+        if (request != null) {
+            Hibernate.initialize(request);
+            if (request.getLansia() != null) {
+                Hibernate.initialize(request.getLansia());
+            }
+        }
+        User volunteer = assignment.getVolunteer();
+        if (volunteer != null) {
+            Hibernate.initialize(volunteer);
+        }
+        return assignment;
     }
 }

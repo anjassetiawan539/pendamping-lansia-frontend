@@ -73,6 +73,10 @@ public class RequestService {
         requestRepository.delete(request);
     }
 
+    public List<Request> getByLansiaUserId(Integer userId) {
+        return requestRepository.findByLansia_UserId(userId);
+    }
+
     private User fetchValidatedLansia(User requested) {
         if (requested == null || requested.getUserId() == null) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Lansia user id is required");

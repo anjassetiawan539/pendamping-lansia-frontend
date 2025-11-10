@@ -57,6 +57,11 @@ public class RequestController {
         requestService.delete(id);
     }
 
+    @GetMapping("/lansia/{userId}")
+    public List<Request> getByLansiaUserId(@PathVariable Integer userId) {
+        return requestService.getByLansiaUserId(userId);
+    }
+
     private Request toEntity(RequestDto dto) {
         Request request = new Request();
         request.setLansia(userRef(dto.getLansiaUserId()));

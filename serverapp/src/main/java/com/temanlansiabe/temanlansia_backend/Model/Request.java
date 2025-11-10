@@ -35,6 +35,7 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 public class Request {
     
     @Id

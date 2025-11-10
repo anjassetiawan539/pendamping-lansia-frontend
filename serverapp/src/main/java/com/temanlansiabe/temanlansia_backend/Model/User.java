@@ -6,6 +6,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import jakarta.persistence.Column;
@@ -28,6 +29,7 @@ import lombok.Setter;
 @Getter @Setter
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
+@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
