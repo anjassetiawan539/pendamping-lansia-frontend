@@ -9,105 +9,92 @@
     <div th:fragment="content">
         <div class="container d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 70px);">
 
-            <div class="card bg-white border-0 register-card-custom" style="width: 30rem;">
-                <div class="card-body p-4 p-md-5">
-                    <h3 class="card-title text-center mb-4 text-dark"><strong>Daftar Akun
-                            Baru</strong></h3>
-
-                    <p class="text-center text-muted mb-4">Bergabunglah sebagai Keluarga atau
-                        Relawan</p>
+            <div class="card bg-white border-0 register-card-custom shadow-lg" style="width: 35rem;">
+                <div class="card-body p-3 p-md-3">
+                    <h3 class="card-title text-center mb-2 text-dark"><strong>Daftar Akun Baru</strong></h3>
+                    <p class="text-center text-muted small mb-2">Bergabunglah sebagai Keluarga atau Relawan</p>
 
                     <form id="register-form" novalidate>
-                        <div id="register-error" class="alert alert-danger d-none" role="alert">
-                        </div>
+                        <div id="register-error" class="alert alert-danger d-none small" role="alert"></div>
 
-                        <div class="mb-3">
-                            <label for="register-role" class="form-label text-dark">Saya
-                                ingin mendaftar sebagai:</label>
+                        <div class="row g-1">
 
-                            <select class="form-select" id="register-role" required>
-                                <option value="keluarga" selected>Keluarga (Membutuhkan
-                                    Layanan)</option>
-                                <option value="relawan">Relawan (Ingin Membantu)
-                                </option>
-                            </select>
-
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="register-username" class="form-label text-dark">Username</label>
-
-                            <input type="text" class="form-control" id="register-username" required>
-
-                            <div class="form-text text-muted">Wajib diisi. Gunakan nama unik Anda.</div>
-
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="register-fullname" class="form-label text-dark">Nama
-                                Lengkap</label>
-                            <input type="text" class="form-control" id="register-fullname" placeholder="Opsional">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="register-email" class="form-label text-dark">Email</label>
-                            <input type="email" class="form-control" id="register-email" required>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="register-phone" class="form-label text-dark">Nomor
-                                Telepon</label>
-                            <input type="tel" class="form-control" id="register-phone" placeholder="Opsional">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="register-province" class="form-label text-dark">Provinsi</label>
-                            <input type="text" class="form-control" id="register-province" placeholder="Opsional">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="register-city" class="form-label text-dark">Kota/Kabupaten</label>
-                            <input type="text" class="form-control" id="register-city" placeholder="Opsional">
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="register-address" class="form-label text-dark">Detail Alamat</label>
-                            <textarea class="form-control" id="register-address" rows="2"
-                                placeholder="Opsional"></textarea>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="register-bio" class="form-label text-dark">Bio</label>
-                            <textarea class="form-control" id="register-bio" rows="2" placeholder="Opsional"></textarea>
-                        </div>
-
-                        <div class="mb-4">
-                            <label for="register-password" class="form-label text-dark">Password</label>
-                            <div class="input-group">
-                                <input type="password" class="form-control" id="register-password" required>
-
-                                <button class="btn btn-outline-secondary toggle-password" type="button">
-                                    <i class="bi bi-eye-slash text-muted"></i>
-                                </button>
-
+                            <div class="col-12 mb-1">
+                                <label for="register-role" class="form-label text-dark small">Saya ingin mendaftar
+                                    sebagai:</label>
+                                <select class="form-select form-select-sm" id="register-role" required>
+                                    <option value="keluarga" selected>Keluarga (Membutuhkan Layanan)</option>
+                                    <option value="relawan">Relawan (Ingin Membantu)</option>
+                                </select>
                             </div>
-                        </div>
 
-                        <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">Daftar Akun</button>
+                            <div class="col-12 col-sm-6 mb-1"> <label for="register-username"
+                                    class="form-label text-dark small">Username</label>
+                                <input type="text" class="form-control form-control-sm" id="register-username" required>
+                                <div class="form-text text-muted small mt-0 pt-0">Wajib diisi. Gunakan nama unik Anda.
+                                </div>
+                            </div>
+                            <div class="col-12 col-sm-6 mb-1"> <label for="register-email"
+                                    class="form-label text-dark small">Email</label>
+                                <input type="email" class="form-control form-control-sm" id="register-email" required>
+                            </div>
+
+                            <div class="col-12 col-sm-6 mb-1"> <label for="register-fullname"
+                                    class="form-label text-dark small">Nama Lengkap</label>
+                                <input type="text" class="form-control form-control-sm" id="register-fullname"
+                                    placeholder="Opsional">
+                            </div>
+                            <div class="col-12 col-sm-6 mb-1"> <label for="register-phone"
+                                    class="form-label text-dark small">Nomor Telepon</label>
+                                <input type="tel" class="form-control form-control-sm" id="register-phone"
+                                    placeholder="Opsional">
+                            </div>
+
+                            <div class="col-12 col-sm-6 mb-1"> <label for="register-province"
+                                    class="form-label text-dark small">Provinsi</label>
+                                <input type="text" class="form-control form-control-sm" id="register-province"
+                                    placeholder="Opsional">
+                            </div>
+                            <div class="col-12 col-sm-6 mb-1"> <label for="register-city"
+                                    class="form-label text-dark small">Kota/Kabupaten</label>
+                                <input type="text" class="form-control form-control-sm" id="register-city"
+                                    placeholder="Opsional">
+                            </div>
+
+                            <div class="col-12 mb-1"> <label for="register-address"
+                                    class="form-label text-dark small">Detail Alamat</label>
+                                <textarea class="form-control form-control-sm" id="register-address" rows="2"
+                                    placeholder="Opsional"></textarea>
+                            </div>
+
+                            <div class="col-12 mb-1"> <label for="register-bio"
+                                    class="form-label text-dark small">Bio</label>
+                                <textarea class="form-control form-control-sm" id="register-bio" rows="2"
+                                    placeholder="Opsional"></textarea>
+                            </div>
+
+                            <div class="col-12 mb-3">
+                                <label for="register-password" class="form-label text-dark small">Password</label>
+                                <div class="input-group input-group-sm">
+                                    <input type="password" class="form-control" id="register-password" required>
+                                    <button class="btn btn-outline-secondary toggle-password" type="button">
+                                        <i class="bi bi-eye-slash text-muted small"></i>
+                                    </button>
+                                </div>
+                            </div>
+
+                        </div> <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">Daftar Akun</button>
 
                         <div class="text-center">
-                            <a th:href="@{/login}" class="d-block text-muted text-decoration-none">Sudah punya akun?
+                            <a th:href="@{/login}" class="d-block text-muted text-decoration-none small">Sudah punya
+                                akun?
                                 <strong class="text-dark">Masuk di sini</strong></a>
                         </div>
-
                     </form>
-
                 </div>
             </div>
         </div>
-
         <script defer th:src="@{/js/auth.js}"></script>
-
     </div>
 </body>
 
