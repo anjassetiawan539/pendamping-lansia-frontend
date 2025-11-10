@@ -1,38 +1,59 @@
 <!DOCTYPE html>
-<html lang="id" xmlns:th="http://www.thymeleaf.org" th:replace="layouts/public :: layout(~{::title}, ~{::content}, 'bg-dark')">
+<html lang="id" xmlns:th="http://www.thymeleaf.org"
+    th:replace="layouts/public :: layout(~{::title}, ~{::content}, 'bg-dark')">
+
 <head>
-    <title>Masuk - Teman Lansia</title>
+        <title>Masuk - Teman Lansia</title>
 </head>
+
 <body>
     <div th:fragment="content">
         <div class="container d-flex justify-content-center" style="margin-top: 15vh; margin-bottom: 5rem;">
-            <div class="card bg-dark border-0 register-card-custom" style="width: 30rem;">
+
+            <div class="card bg-white border-0 register-card-custom" style="width: 30rem;">
                 <div class="card-body p-4">
-                    <h3 class="card-title text-center mb-4 text-white"><strong>Masuk Akun</strong></h3>
+
+                    <h3 class="card-title text-center mb-4 text-dark"><strong>Masuk Akun</strong>
+                    </h3>
+
                     <form id="login-form" novalidate>
-                        <div id="login-error" class="alert alert-danger d-none" role="alert"></div>
-                        <div class="mb-3">
-                            <label for="login-email" class="form-label text-white-50">Email</label>
-                            <input type="email" class="form-control dark-input-custom" id="login-email" required>
+                        <div id="login-error" class="alert alert-danger d-none" role="alert">
                         </div>
+
+                        <div class="mb-3">
+                            <label for="login-email" class="form-label text-dark">Email</label>
+
+                            <input type="email" class="form-control" id="login-email" required>
+                        </div>
+
                         <div class="mb-4">
-                            <label for="login-password" class="form-label text-white-50">Password</label>
+                            <label for="login-password" class="form-label text-dark">Password</label>
+
                             <div class="input-group">
-                                <input type="password" class="form-control dark-input-custom" id="login-password" required>
-                                <button class="btn btn-outline-secondary toggle-password dark-btn-outline" type="button">
-                                    <i class="bi bi-eye-slash text-white-50"></i>
+                                <input type="password" class="form-control" id="login-password" required>
+                                <button class="btn btn-outline-secondary toggle-password" type="button">
+                                    <i class="bi bi-eye-slash text-muted"></i>
                                 </button>
                             </div>
+
                         </div>
+
                         <button type="submit" class="btn btn-primary w-100 mb-3">Masuk</button>
+
                         <div class="text-center">
-                            <a th:href="@{/register}" class="d-block text-white-50">Belum punya akun? Daftar</a>
+                            <a th:href="@{/register}" class="d-block text-muted">Belum punya
+                                akun? Daftar</a>
                         </div>
+
                     </form>
+
                 </div>
             </div>
         </div>
+
         <script defer th:src="@{/js/auth.js}"></script>
+
     </div>
 </body>
+
 </html>

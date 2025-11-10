@@ -1,85 +1,114 @@
 <!DOCTYPE html>
 <html lang="id" xmlns:th="http://www.thymeleaf.org" th:replace="layouts/public :: layout(~{::title}, ~{::content}, '')">
+
 <head>
     <title>Daftar - Teman Nenek</title>
 </head>
+
 <body>
     <div th:fragment="content">
         <div class="container d-flex justify-content-center align-items-center" style="min-height: calc(100vh - 70px);">
-            <div class="card bg-dark border-0 register-card-custom" style="width: 30rem;">
+
+            <div class="card bg-white border-0 register-card-custom" style="width: 30rem;">
                 <div class="card-body p-4 p-md-5">
-                    <h3 class="card-title text-center mb-4 text-white"><strong>Daftar Akun Baru</strong></h3>
-                    <p class="text-center text-white-50 mb-4">Bergabunglah sebagai Keluarga atau Relawan</p>
+                    <h3 class="card-title text-center mb-4 text-dark"><strong>Daftar Akun
+                            Baru</strong></h3>
+
+                    <p class="text-center text-muted mb-4">Bergabunglah sebagai Keluarga atau
+                        Relawan</p>
+
                     <form id="register-form" novalidate>
-                        <div id="register-error" class="alert alert-danger d-none" role="alert"></div>
+                        <div id="register-error" class="alert alert-danger d-none" role="alert">
+                        </div>
+
                         <div class="mb-3">
-                            <label for="register-role" class="form-label text-white-50">Saya ingin mendaftar sebagai:</label>
-                            <select class="form-select dark-input-custom" id="register-role" required>
-                                <option value="keluarga" selected>Keluarga (Membutuhkan Layanan)</option>
-                                <option value="relawan">Relawan (Ingin Membantu)</option>
+                            <label for="register-role" class="form-label text-dark">Saya
+                                ingin mendaftar sebagai:</label>
+
+                            <select class="form-select" id="register-role" required>
+                                <option value="keluarga" selected>Keluarga (Membutuhkan
+                                    Layanan)</option>
+                                <option value="relawan">Relawan (Ingin Membantu)
+                                </option>
                             </select>
+
                         </div>
+
                         <div class="mb-3">
-                            <label for="register-username" class="form-label text-white-50">Username</label>
-                            <input
-                                type="text"
-                                class="form-control dark-input-custom"
-                                id="register-username"
-                                required
-                            >
-                            <div class="form-text text-white-50">Wajib diisi. Gunakan nama unik Anda.</div>
+                            <label for="register-username" class="form-label text-dark">Username</label>
+
+                            <input type="text" class="form-control" id="register-username" required>
+
+                            <div class="form-text text-muted">Wajib diisi. Gunakan nama unik Anda.</div>
+
                         </div>
+
                         <div class="mb-3">
-                            <label for="register-fullname" class="form-label text-white-50">Nama Lengkap</label>
-                            <input type="text" class="form-control dark-input-custom" id="register-fullname" placeholder="Opsional">
+                            <label for="register-fullname" class="form-label text-dark">Nama
+                                Lengkap</label>
+                            <input type="text" class="form-control" id="register-fullname" placeholder="Opsional">
                         </div>
+
                         <div class="mb-3">
-                            <label for="register-email" class="form-label text-white-50">Email</label>
-                            <input type="email" class="form-control dark-input-custom" id="register-email" required>
+                            <label for="register-email" class="form-label text-dark">Email</label>
+                            <input type="email" class="form-control" id="register-email" required>
                         </div>
+
                         <div class="mb-3">
-                            <label for="register-phone" class="form-label text-white-50">Nomor Telepon</label>
-                            <input
-                                type="tel"
-                                class="form-control dark-input-custom"
-                                id="register-phone"
-                                placeholder="Opsional"
-                            >
+                            <label for="register-phone" class="form-label text-dark">Nomor
+                                Telepon</label>
+                            <input type="tel" class="form-control" id="register-phone" placeholder="Opsional">
                         </div>
+
                         <div class="mb-3">
-                            <label for="register-province" class="form-label text-white-50">Provinsi</label>
-                            <input type="text" class="form-control dark-input-custom" id="register-province" placeholder="Opsional">
+                            <label for="register-province" class="form-label text-dark">Provinsi</label>
+                            <input type="text" class="form-control" id="register-province" placeholder="Opsional">
                         </div>
+
                         <div class="mb-3">
-                            <label for="register-city" class="form-label text-white-50">Kota/Kabupaten</label>
-                            <input type="text" class="form-control dark-input-custom" id="register-city" placeholder="Opsional">
+                            <label for="register-city" class="form-label text-dark">Kota/Kabupaten</label>
+                            <input type="text" class="form-control" id="register-city" placeholder="Opsional">
                         </div>
+
                         <div class="mb-3">
-                            <label for="register-address" class="form-label text-white-50">Detail Alamat</label>
-                            <textarea class="form-control dark-input-custom" id="register-address" rows="2" placeholder="Opsional"></textarea>
+                            <label for="register-address" class="form-label text-dark">Detail Alamat</label>
+                            <textarea class="form-control" id="register-address" rows="2"
+                                placeholder="Opsional"></textarea>
                         </div>
+
                         <div class="mb-3">
-                            <label for="register-bio" class="form-label text-white-50">Bio</label>
-                            <textarea class="form-control dark-input-custom" id="register-bio" rows="2" placeholder="Opsional"></textarea>
+                            <label for="register-bio" class="form-label text-dark">Bio</label>
+                            <textarea class="form-control" id="register-bio" rows="2" placeholder="Opsional"></textarea>
                         </div>
+
                         <div class="mb-4">
-                            <label for="register-password" class="form-label text-white-50">Password</label>
+                            <label for="register-password" class="form-label text-dark">Password</label>
                             <div class="input-group">
-                                <input type="password" class="form-control dark-input-custom" id="register-password" required>
-                                <button class="btn btn-outline-secondary toggle-password dark-btn-outline" type="button">
-                                    <i class="bi bi-eye-slash text-white-50"></i>
+                                <input type="password" class="form-control" id="register-password" required>
+
+                                <button class="btn btn-outline-secondary toggle-password" type="button">
+                                    <i class="bi bi-eye-slash text-muted"></i>
                                 </button>
+
                             </div>
                         </div>
+
                         <button type="submit" class="btn btn-primary btn-lg w-100 mb-3">Daftar Akun</button>
+
                         <div class="text-center">
-                            <a th:href="@{/login}" class="d-block text-white-50 text-decoration-none">Sudah punya akun? <strong class="text-white">Masuk di sini</strong></a>
+                            <a th:href="@{/login}" class="d-block text-muted text-decoration-none">Sudah punya akun?
+                                <strong class="text-dark">Masuk di sini</strong></a>
                         </div>
+
                     </form>
+
                 </div>
             </div>
         </div>
+
         <script defer th:src="@{/js/auth.js}"></script>
+
     </div>
 </body>
+
 </html>
