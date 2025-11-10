@@ -229,33 +229,50 @@
                     </div>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                    <div class="row g-3">
-                        <div class="col-12 col-md-6">
-                            <p class="text-muted small mb-1">Username</p>
-                            <p class="fw-semibold mb-0">admin1</p>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <p class="text-muted small mb-1">Nama Lengkap</p>
-                            <p class="fw-semibold mb-0">Admin</p>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <p class="text-muted small mb-1">Email</p>
-                            <p class="fw-semibold mb-0">admin@temannenek.com</p>
-                        </div>
-                        <div class="col-12 col-md-6">
-                            <p class="text-muted small mb-1">No Telepon</p>
-                            <p class="fw-semibold mb-0">+6200000000</p>
-                        </div>
-                        <div class="col-12">
-                            <p class="text-muted small mb-1">Bio</p>
-                            <p class="fw-semibold mb-0">Admin Teman Nenek</p>
+                <form id="profile-update-form">
+                    <div class="modal-body">
+                        <div id="profile-update-success" class="alert alert-success d-none mb-3" role="alert"></div>
+                        <div id="profile-update-error" class="alert alert-danger d-none mb-3" role="alert"></div>
+                        <div class="row g-3">
+                            <div class="col-12 col-md-6">
+                                <label class="form-label text-muted small mb-1">Username</label>
+                                <input type="text" class="form-control" id="profile-modal-username" required>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label text-muted small mb-1">Nama Lengkap</label>
+                                <input type="text" class="form-control" id="profile-modal-fullname">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label text-muted small mb-1">Email</label>
+                                <input type="email" class="form-control" id="profile-modal-email" required>
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label text-muted small mb-1">No Telepon</label>
+                                <input type="text" class="form-control" id="profile-modal-phone">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label text-muted small mb-1">Provinsi</label>
+                                <input type="text" class="form-control" id="profile-modal-province">
+                            </div>
+                            <div class="col-12 col-md-6">
+                                <label class="form-label text-muted small mb-1">Kota</label>
+                                <input type="text" class="form-control" id="profile-modal-city">
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label text-muted small mb-1">Alamat Detail</label>
+                                <textarea class="form-control" rows="2" id="profile-modal-address"></textarea>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label text-muted small mb-1">Bio</label>
+                                <textarea class="form-control" rows="2" id="profile-modal-bio"></textarea>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
-                </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Tutup</button>
+                        <button type="submit" class="btn btn-primary" id="profile-update-submit">Update Profil</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>

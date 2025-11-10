@@ -232,7 +232,10 @@ class ApiService {
         const userId = this.ensureValidId(id, 'ID pengguna');
         return this.request(`/user/${encodeURIComponent(userId)}`, {
             method: 'PUT',
-            body: userData
+            body: userData,
+            headers: {
+                'Content-Type': 'application/json'
+            }
         });
     }
 
