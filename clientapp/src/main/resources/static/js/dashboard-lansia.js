@@ -12,15 +12,7 @@ $(document).ready(function () {
     }
 
     const currentUserId = currentUser.userId;
-    const displayName = currentUser.fullname || currentUser.username || 'Keluarga';
-    $('#navbar-user-name').text(displayName);
-    $('#lansia-hero-name').text(displayName);
-    $('#lansia-hero-email').text(currentUser.email || '-');
-    $('#lansia-hero-phone').text(currentUser.phone || '-');
-
-    if ($('#user-table').length) {
-        renderProfile(currentUser);
-    }
+    hydrateProfile();
 
     if ($('#request-form').length || $('#my-requests-body').length) {
         initRequestSection(currentUserId);
@@ -30,15 +22,110 @@ $(document).ready(function () {
         initReviewSection(currentUserId);
     }
 
+    async function hydrateProfile() {
+        updateProfileUI(currentUser);
+        try {
+            const freshProfile = await apiService.getUserById(currentUserId);
+            if (freshProfile) {
+                const merged = { ...currentUser, ...freshProfile };
+                SessionManager.setUser({ ...merged, role: currentUser.role });
+                updateProfileUI(merged);
+            }
+        } catch (error) {
+            console.warn('Gagal memuat profil lengkap:', error);
+        }
+    }
+
+    function updateProfileUI(userData) {
+        const name = getDisplayName(userData);
+        $('#navbar-user-name').text(name);
+        $('#lansia-hero-name').text(name);
+        $('#lansia-hero-email').text(userData.email || '-');
+        $('#lansia-hero-phone').text(formatPhone(userData.phone));
+
+        if ($('#user-table').length) {
+            renderProfile(userData);
+        }
+    }
+
     function renderProfile(user) {
-        $('#user-table tbody').html(`
+        const row = `
             <tr>
-                <td>${user.fullname || user.username || '-'}</td>
-                <td>${user.email || '-'}</td>
+                <td>${escapeHtml(user.username)}</td>
+                <td>${escapeHtml(user.fullname)}</td>
+                <td>${escapeHtml(user.email)}</td>
+                <td>${escapeHtml(formatPhone(user.phone))}</td>
+                <td>${escapeHtml(user.province)}</td>
+                <td>${escapeHtml(user.city)}</td>
+                <td>${escapeHtml(user.addressDetail)}</td>
+                <td>${escapeHtml(user.bio)}</td>
             </tr>
-        `);
+        `;
+
+        const $table = $('#user-table');
+        $table.find('tbody').html(row);
+
+        if (typeof $.fn.DataTable === 'function') {
+            if ($.fn.dataTable.isDataTable($table)) {
+                $table.DataTable().destroy();
+            }
+            $table.DataTable({
+                paging: false,
+                searching: false,
+                info: false,
+                ordering: false,
+                scrollX: true,
+                autoWidth: false,
+                language: {
+                    emptyTable: 'Data tidak tersedia'
+                }
+            });
+        }
     }
 });
+
+function formatPhone(value) {
+    if (!value) {
+        return '-';
+    }
+    const trimmed = value.toString().trim();
+    if (!trimmed) {
+        return '-';
+    }
+    if (trimmed.startsWith('0')) {
+        return `+62${trimmed.substring(1)}`;
+    }
+    if (trimmed.startsWith('+') || trimmed.startsWith('62')) {
+        return trimmed;
+    }
+    return trimmed;
+}
+
+function getDisplayName(user) {
+    if (user && typeof user.fullname === 'string' && user.fullname.trim().length > 0) {
+        return user.fullname.trim();
+    }
+    if (user && typeof user.username === 'string') {
+        const trimmed = user.username.trim();
+        if (trimmed.length > 0 && !trimmed.includes('@')) {
+            return trimmed;
+        }
+    }
+    return 'Keluarga';
+}
+
+function escapeHtml(value) {
+    if (value === undefined || value === null) {
+        return '-';
+    }
+    return value
+        .toString()
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
 
 function initRequestSection(currentUserId) {
     const hasRequestsTable = $('#my-requests-body').length > 0;
@@ -133,7 +220,7 @@ function initRequestSection(currentUserId) {
         `);
 
         try {
-            const requests = await apiService.getRequestsByLansiaUserId(currentUserId);
+            const requests = await fetchRequestsForCurrentUser();
             await renderRequests(requests || []);
         } catch (error) {
             $('#my-requests-body').html(`
@@ -145,6 +232,53 @@ function initRequestSection(currentUserId) {
             `);
         }
     }
+
+    async function fetchRequestsForCurrentUser() {
+        try {
+            const direct = await apiService.getRequestsByLansiaUserId(currentUserId);
+            return normalizeRequestList(direct);
+        } catch (error) {
+            console.warn('Gagal memuat request khusus lansia, fallback ke request umum:', error.message || error);
+        }
+
+        try {
+            const allRequests = await apiService.getAllRequests();
+            return normalizeRequestList(allRequests).filter(req => getRequestLansiaId(req) === currentUserId);
+        } catch (fallbackError) {
+            console.error('Gagal memuat request dari endpoint umum:', fallbackError);
+            throw fallbackError;
+        }
+    }
+
+    function normalizeRequestList(payload) {
+        if (Array.isArray(payload)) {
+            return payload;
+        }
+        if (payload && Array.isArray(payload.data)) {
+            return payload.data;
+        }
+        if (payload && Array.isArray(payload.content)) {
+            return payload.content;
+        }
+        return [];
+    }
+
+    function getRequestLansiaId(request) {
+        if (!request) {
+            return null;
+        }
+        if (typeof request.lansiaUserId === 'number') {
+            return request.lansiaUserId;
+        }
+        if (request.lansia && typeof request.lansia.userId === 'number') {
+            return request.lansia.userId;
+        }
+        if (request.lansiaUser && typeof request.lansiaUser.userId === 'number') {
+            return request.lansiaUser.userId;
+        }
+        return null;
+    }
+
 
     async function renderRequests(requests) {
         if (!requests.length) {
