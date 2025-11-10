@@ -13,6 +13,9 @@ $(document).ready(function () {
 
     const currentUserId = currentUser.userId;
     hydrateProfile();
+    if ($('#lansia-stats-wrapper').length) {
+        hydrateDashboardStats(currentUserId);
+    }
 
     if ($('#request-form').length || $('#my-requests-body').length) {
         initRequestSection(currentUserId);
@@ -42,45 +45,62 @@ $(document).ready(function () {
         $('#lansia-hero-name').text(name);
         $('#lansia-hero-email').text(userData.email || '-');
         $('#lansia-hero-phone').text(formatPhone(userData.phone));
+        populateProfileModal(userData);
+    }
 
-        if ($('#user-table').length) {
-            renderProfile(userData);
+    function populateProfileModal(user = {}) {
+        $('#profile-modal-username').text(escapeHtml(user.username));
+        $('#profile-modal-fullname').text(escapeHtml(user.fullname));
+        $('#profile-modal-email').text(escapeHtml(user.email));
+        $('#profile-modal-phone').text(escapeHtml(formatPhone(user.phone)));
+        $('#profile-modal-province').text(escapeHtml(user.province));
+        $('#profile-modal-city').text(escapeHtml(user.city));
+        $('#profile-modal-address').text(escapeHtml(user.addressDetail));
+        $('#profile-modal-bio').text(escapeHtml(user.bio));
+    }
+
+    async function hydrateDashboardStats(userId) {
+        try {
+            const requests = await fetchRequestsForLansia(userId);
+            updateStatsUI(requests || []);
+        } catch (error) {
+            console.error('Gagal memuat statistik request:', error);
+            updateStatsUI([]);
         }
     }
 
-    function renderProfile(user) {
-        const row = `
-            <tr>
-                <td>${escapeHtml(user.username)}</td>
-                <td>${escapeHtml(user.fullname)}</td>
-                <td>${escapeHtml(user.email)}</td>
-                <td>${escapeHtml(formatPhone(user.phone))}</td>
-                <td>${escapeHtml(user.province)}</td>
-                <td>${escapeHtml(user.city)}</td>
-                <td>${escapeHtml(user.addressDetail)}</td>
-                <td>${escapeHtml(user.bio)}</td>
-            </tr>
-        `;
+    function updateStatsUI(requests) {
+        const counters = {
+            requested: 0,
+            assigned: 0,
+            progress: 0,
+            completed: 0
+        };
 
-        const $table = $('#user-table');
-        $table.find('tbody').html(row);
-
-        if (typeof $.fn.DataTable === 'function') {
-            if ($.fn.dataTable.isDataTable($table)) {
-                $table.DataTable().destroy();
+        requests.forEach((req) => {
+            const status = (req.status || '').toUpperCase();
+            switch (status) {
+                case 'OFFERED':
+                    counters.requested += 1;
+                    break;
+                case 'ASSIGNED':
+                    counters.assigned += 1;
+                    break;
+                case 'ON_GOING':
+                    counters.progress += 1;
+                    break;
+                case 'DONE':
+                    counters.completed += 1;
+                    break;
+                default:
+                    break;
             }
-            $table.DataTable({
-                paging: false,
-                searching: false,
-                info: false,
-                ordering: false,
-                scrollX: true,
-                autoWidth: false,
-                language: {
-                    emptyTable: 'Data tidak tersedia'
-                }
-            });
-        }
+        });
+
+        $('#stat-requested').text(counters.requested);
+        $('#stat-assigned').text(counters.assigned);
+        $('#stat-progress').text(counters.progress);
+        $('#stat-completed').text(counters.completed);
     }
 });
 
