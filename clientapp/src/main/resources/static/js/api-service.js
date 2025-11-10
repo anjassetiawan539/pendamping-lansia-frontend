@@ -2,20 +2,102 @@
 class ApiService {
     constructor() {
         this.baseUrl = 'http://localhost:9000/api';
+        this._sessionExpiredHandled = false;
     }
 
     getAuthToken() {
         if (typeof window === 'undefined') {
             return null;
         }
-        return localStorage.getItem('authToken') ||
+        const rawToken = localStorage.getItem('authToken') ||
             sessionStorage.getItem('authToken') ||
             null;
+        return this.normalizeToken(rawToken);
     }
 
-    buildHeaders(customHeaders = {}, hasJsonBody = false) {
-        const headers = new Headers(customHeaders);
+    normalizeToken(rawToken) {
+        if (!rawToken) {
+            return null;
+        }
+        const trimmed = rawToken.toString().trim();
+        if (!trimmed || trimmed.toLowerCase() === 'null' || trimmed.toLowerCase() === 'undefined') {
+            return null;
+        }
+        return trimmed;
+    }
+
+    ensureActiveToken() {
         const token = this.getAuthToken();
+        if (!token) {
+            return null;
+        }
+        if (this.isTokenExpired(token)) {
+            this.handleSessionExpiry();
+            return null;
+        }
+        this._sessionExpiredHandled = false;
+        return token;
+    }
+
+    isTokenExpired(token) {
+        if (!token) {
+            return true;
+        }
+        try {
+            const payload = this.decodeTokenPayload(token);
+            if (!payload || !payload.exp) {
+                return false;
+            }
+            const nowSeconds = Math.floor(Date.now() / 1000);
+            return payload.exp <= nowSeconds;
+        } catch (error) {
+            console.warn('Gagal membaca payload token:', error);
+            return true;
+        }
+    }
+
+    decodeTokenPayload(token) {
+        const parts = token.split('.');
+        if (parts.length !== 3) {
+            return null;
+        }
+        const base64 = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+        const padded = base64.padEnd(Math.ceil(base64.length / 4) * 4, '=');
+        const decoded = atob(padded);
+        return JSON.parse(decoded);
+    }
+
+    handleSessionExpiry() {
+        if (this._sessionExpiredHandled) {
+            return;
+        }
+        this._sessionExpiredHandled = true;
+        if (typeof SessionManager !== 'undefined') {
+            SessionManager.clearUser();
+        }
+        if (typeof localStorage !== 'undefined') {
+            localStorage.removeItem('authToken');
+            localStorage.removeItem('userRole');
+            localStorage.removeItem('userId');
+        }
+        if (typeof sessionStorage !== 'undefined') {
+            sessionStorage.removeItem('authToken');
+        }
+        if (typeof window !== 'undefined' && typeof window.dispatchEvent === 'function') {
+            window.dispatchEvent(new CustomEvent('session-expired'));
+        }
+    }
+
+    buildAuthError(message) {
+        const error = new Error(message);
+        error.status = 401;
+        error.code = 'AUTH_REQUIRED';
+        return error;
+    }
+
+    buildHeaders(customHeaders = {}, hasJsonBody = false, requireAuth = true) {
+        const headers = new Headers(customHeaders);
+        const token = requireAuth ? this.ensureActiveToken() : null;
 
         if (token && !headers.has('Authorization')) {
             headers.set('Authorization', `Bearer ${token}`);
@@ -30,19 +112,28 @@ class ApiService {
 
     // Helper untuk fetch dengan error handling
     async request(url, options = {}) {
-        const hasBody = options.body !== undefined && options.body !== null;
-        const shouldStringify = hasBody &&
-            typeof options.body === 'object' &&
-            !(options.body instanceof FormData) &&
-            !(options.body instanceof Blob);
+        const {
+            requireAuth = true,
+            ...fetchOptions
+        } = options;
 
-        const isJsonString = hasBody && typeof options.body === 'string';
-        const payloadBody = shouldStringify ? JSON.stringify(options.body) : options.body;
-        const headers = this.buildHeaders(options.headers, shouldStringify || isJsonString);
+        const hasBody = fetchOptions.body !== undefined && fetchOptions.body !== null;
+        const shouldStringify = hasBody &&
+            typeof fetchOptions.body === 'object' &&
+            !(fetchOptions.body instanceof FormData) &&
+            !(fetchOptions.body instanceof Blob);
+
+        const isJsonString = hasBody && typeof fetchOptions.body === 'string';
+        const payloadBody = shouldStringify ? JSON.stringify(fetchOptions.body) : fetchOptions.body;
+        const headers = this.buildHeaders(fetchOptions.headers, shouldStringify || isJsonString, requireAuth);
+
+        if (requireAuth && !headers.has('Authorization')) {
+            throw this.buildAuthError('Sesi Anda telah berakhir. Silakan login kembali.');
+        }
 
         try {
             const response = await fetch(`${this.baseUrl}${url}`, {
-                ...options,
+                ...fetchOptions,
                 headers,
                 body: payloadBody
             });
@@ -63,6 +154,9 @@ class ApiService {
                 : parsedBody;
 
             if (!response.ok) {
+                if (response.status === 401 || response.status === 403) {
+                    this.handleSessionExpiry();
+                }
                 const message =
                     (data && data.message) ||
                     (parsedBody && parsedBody.message) ||
@@ -77,6 +171,9 @@ class ApiService {
             return data;
         } catch (error) {
             console.error('API Error:', error);
+            if (error.status === 401 || error.status === 403) {
+                this.handleSessionExpiry();
+            }
             throw error;
         }
     }

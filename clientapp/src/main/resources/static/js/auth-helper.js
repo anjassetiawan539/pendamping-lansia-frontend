@@ -61,3 +61,10 @@ function requireRole(allowedRoles) {
 
     return true;
 }
+
+if (typeof window !== 'undefined') {
+    window.addEventListener('session-expired', function () {
+        alert('Sesi Anda telah berakhir. Silakan login kembali.');
+        logout();
+    });
+}

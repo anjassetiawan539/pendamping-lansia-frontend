@@ -10,11 +10,14 @@ $(document).ready(function () {
         return;
     }
 
-    const currentUserId = currentUser.userId;
-    const displayName = currentUser.fullname || currentUser.username || 'Relawan';
-    $('#navbar-user-name').text(displayName);
-    $('#relawan-hero-name').text(displayName);
-    $('#relawan-hero-email').text(currentUser.email || '-');
+    const storedUserId = Number(currentUser.userId ?? localStorage.getItem('userId'));
+    if (!storedUserId || Number.isNaN(storedUserId)) {
+        alert('Sesi tidak valid, silakan login ulang.');
+        logout();
+        return;
+    }
+    const currentUserId = storedUserId;
+    hydrateRelawanProfile(currentUserId, currentUser);
 
     const sections = {
         stats: $('#total-available').length > 0,
@@ -63,6 +66,30 @@ $(document).ready(function () {
         loadMyTasks();
     };
 
+    function hydrateRelawanProfile(userId, fallbackUser) {
+        updateRelawanUI(fallbackUser);
+        apiService.getUserById(userId)
+            .then(profile => {
+                if (!profile) {
+                    return;
+                }
+                const merged = { ...fallbackUser, ...profile, userId };
+                SessionManager.setUser({ ...merged, role: fallbackUser.role });
+                updateRelawanUI(merged);
+            })
+            .catch(err => console.warn('Gagal memuat profil relawan:', err));
+    }
+
+    function updateRelawanUI(userData) {
+        if (!userData) {
+            return;
+        }
+        const displayName = getDisplayName(userData);
+        $('#navbar-user-name').text(displayName);
+        $('#relawan-hero-name').text(displayName);
+        $('#relawan-hero-email').text(userData.email || '-');
+    }
+
     function loadStats() {
         apiService.getAllRequests()
             .then(requests => {
@@ -91,7 +118,7 @@ $(document).ready(function () {
 
         $('#available-requests').html(`
             <div class="col-12 text-center py-4">
-                <div class="spinner-border text-success" role="status">
+                    <div class="spinner-border text-success" role="status">
                     <span class="visually-hidden">Loading...</span>
                 </div>
             </div>
@@ -167,6 +194,7 @@ $(document).ready(function () {
         apiService.getAssignmentsByVolunteerId(currentUserId)
             .then(assignments => renderMyTasks(assignments || []))
             .catch(error => {
+                console.error('Gagal memuat tugas relawan:', error);
                 $('#my-tasks-body').html(`
                     <tr>
                         <td colspan="7" class="text-center text-danger">
@@ -242,7 +270,7 @@ $(document).ready(function () {
         const tbody = $('#review-table tbody');
         tbody.html(`
             <tr>
-                <td colspan="5" class="text-center py-4">
+                <td colspan="6" class="text-center py-4">
                     <div class="spinner-border text-primary" role="status">
                         <span class="visually-hidden">Loading...</span>
                     </div>
@@ -265,13 +293,17 @@ $(document).ready(function () {
                 const rows = reviews.map(review => {
                     const stars = '⭐'.repeat(review.rating || 0);
                     const reviewer = review.reviewer || {};
+                    const requestSummary = review.request || {};
+                    const layanan = requestSummary.layanan || review.layanan || '-';
+                    const requestId = requestSummary.requestId || review.requestId || '-';
                     const date = review.createdAt ? new Date(review.createdAt).toLocaleDateString('id-ID') : '-';
                     return `
                         <tr>
-                            <td>#${review.requestId || '-'}</td>
+                            <td>#${requestId}</td>
                             <td>${stars} (${review.rating || 0})</td>
                             <td>${review.comment || '-'}</td>
                             <td>${reviewer.fullname || reviewer.username || '-'}</td>
+                            <td>${layanan}</td>
                             <td>${date}</td>
                         </tr>
                     `;
@@ -281,7 +313,7 @@ $(document).ready(function () {
             .catch(error => {
                 tbody.html(`
                     <tr>
-                        <td colspan="5" class="text-center text-danger">
+                        <td colspan="6" class="text-center text-danger">
                             <i class="bi bi-exclamation-triangle"></i> ${error.message || 'Gagal memuat ulasan'}
                         </td>
                     </tr>
@@ -293,15 +325,23 @@ $(document).ready(function () {
         if (!confirm('Ambil request ini?')) {
             return;
         }
+        const numericRequestId = Number(requestId);
+        if (Number.isNaN(numericRequestId)) {
+            alert('Request tidak valid.');
+            return;
+        }
         apiService.createAssignment({
-            requestId,
+            requestId: numericRequestId,
             volunteerUserId: currentUserId
         })
             .then(() => {
                 alert('Request berhasil diambil!');
                 refreshRelawanData();
             })
-            .catch(error => alert(error.message || 'Gagal mengambil request'));
+            .catch(error => {
+                console.error('Gagal mengambil request:', error);
+                alert(error.message || 'Gagal mengambil request');
+            });
     };
 
     window.acceptTask = function (assignmentId) {
@@ -313,7 +353,10 @@ $(document).ready(function () {
                 alert('Tugas diterima!');
                 refreshRelawanData();
             })
-            .catch(error => alert(error.message || 'Gagal menerima tugas'));
+            .catch(error => {
+                console.error('Gagal menerima tugas:', error);
+                alert(error.message || 'Gagal menerima tugas');
+            });
     };
 
     window.startTask = function (assignmentId) {
@@ -325,7 +368,10 @@ $(document).ready(function () {
                 alert('Tugas dimulai!');
                 refreshRelawanData();
             })
-            .catch(error => alert(error.message || 'Gagal memulai tugas'));
+            .catch(error => {
+                console.error('Gagal memulai tugas:', error);
+                alert(error.message || 'Gagal memulai tugas');
+            });
     };
 
     window.completeTask = function (assignmentId) {
@@ -337,6 +383,22 @@ $(document).ready(function () {
                 alert('Terima kasih! Tugas selesai.');
                 refreshRelawanData();
             })
-            .catch(error => alert(error.message || 'Gagal menyelesaikan tugas'));
+            .catch(error => {
+                console.error('Gagal menyelesaikan tugas:', error);
+                alert(error.message || 'Gagal menyelesaikan tugas');
+            });
     };
 });
+
+function getDisplayName(user) {
+    if (user && typeof user.fullname === 'string' && user.fullname.trim().length > 0) {
+        return user.fullname.trim();
+    }
+    if (user && typeof user.username === 'string') {
+        const candidate = user.username.trim();
+        if (candidate.length > 0 && !candidate.includes('@')) {
+            return candidate;
+        }
+    }
+    return 'Relawan';
+}

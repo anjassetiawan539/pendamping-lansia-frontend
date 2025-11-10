@@ -127,6 +127,55 @@ function escapeHtml(value) {
         .replace(/'/g, '&#39;');
 }
 
+async function fetchRequestsForLansia(userId) {
+    if (!userId) {
+        return [];
+    }
+    try {
+        const direct = await apiService.getRequestsByLansiaUserId(userId);
+        return normalizeRequestList(direct);
+    } catch (error) {
+        console.warn('Endpoint khusus lansia tidak tersedia, fallback ke request umum:', error);
+    }
+
+    try {
+        const allRequests = await apiService.getAllRequests();
+        return normalizeRequestList(allRequests).filter(req => getRequestLansiaId(req) === userId);
+    } catch (fallbackError) {
+        console.error('Gagal memuat request dari endpoint umum:', fallbackError);
+        throw fallbackError;
+    }
+}
+
+function normalizeRequestList(payload) {
+    if (Array.isArray(payload)) {
+        return payload;
+    }
+    if (payload && Array.isArray(payload.data)) {
+        return payload.data;
+    }
+    if (payload && Array.isArray(payload.content)) {
+        return payload.content;
+    }
+    return [];
+}
+
+function getRequestLansiaId(request) {
+    if (!request) {
+        return null;
+    }
+    if (typeof request.lansiaUserId === 'number') {
+        return request.lansiaUserId;
+    }
+    if (request.lansia && typeof request.lansia.userId === 'number') {
+        return request.lansia.userId;
+    }
+    if (request.lansiaUser && typeof request.lansiaUser.userId === 'number') {
+        return request.lansiaUser.userId;
+    }
+    return null;
+}
+
 function initRequestSection(currentUserId) {
     const hasRequestsTable = $('#my-requests-body').length > 0;
     const requestForm = $('#request-form');
@@ -220,7 +269,7 @@ function initRequestSection(currentUserId) {
         `);
 
         try {
-            const requests = await fetchRequestsForCurrentUser();
+            const requests = await fetchRequestsForLansia(currentUserId);
             await renderRequests(requests || []);
         } catch (error) {
             $('#my-requests-body').html(`
@@ -233,51 +282,6 @@ function initRequestSection(currentUserId) {
         }
     }
 
-    async function fetchRequestsForCurrentUser() {
-        try {
-            const direct = await apiService.getRequestsByLansiaUserId(currentUserId);
-            return normalizeRequestList(direct);
-        } catch (error) {
-            console.warn('Gagal memuat request khusus lansia, fallback ke request umum:', error.message || error);
-        }
-
-        try {
-            const allRequests = await apiService.getAllRequests();
-            return normalizeRequestList(allRequests).filter(req => getRequestLansiaId(req) === currentUserId);
-        } catch (fallbackError) {
-            console.error('Gagal memuat request dari endpoint umum:', fallbackError);
-            throw fallbackError;
-        }
-    }
-
-    function normalizeRequestList(payload) {
-        if (Array.isArray(payload)) {
-            return payload;
-        }
-        if (payload && Array.isArray(payload.data)) {
-            return payload.data;
-        }
-        if (payload && Array.isArray(payload.content)) {
-            return payload.content;
-        }
-        return [];
-    }
-
-    function getRequestLansiaId(request) {
-        if (!request) {
-            return null;
-        }
-        if (typeof request.lansiaUserId === 'number') {
-            return request.lansiaUserId;
-        }
-        if (request.lansia && typeof request.lansia.userId === 'number') {
-            return request.lansia.userId;
-        }
-        if (request.lansiaUser && typeof request.lansiaUser.userId === 'number') {
-            return request.lansiaUser.userId;
-        }
-        return null;
-    }
 
 
     async function renderRequests(requests) {
@@ -412,6 +416,8 @@ function initRequestSection(currentUserId) {
 function initReviewSection(currentUserId) {
     const reviewsTable = $('#my-reviews-body');
     const reviewForm = $('#review-form');
+    const reviewSelect = $('#review-assignment-select');
+    let reviewOptions = [];
 
     if (!reviewsTable.length && !reviewForm.length) {
         return;
@@ -422,47 +428,90 @@ function initReviewSection(currentUserId) {
     };
 
     loadMyReviews();
+    if (reviewSelect.length) {
+        hydrateReviewOptions();
+    }
 
     if (reviewForm.length) {
         reviewForm.on('submit', async function (event) {
             event.preventDefault();
             clearReviewFeedback();
 
-            const requestId = parseInt($('#review-request-id').val(), 10);
+            const selectedIndex = parseInt(reviewSelect.val(), 10);
             const rating = parseInt($('#review-rating').val(), 10);
             const comment = $('#review-comment').val();
 
-            if (!requestId || !rating) {
-                showReviewFeedback('Request ID dan rating wajib diisi.', true);
+            if (Number.isNaN(selectedIndex) || !reviewOptions[selectedIndex]) {
+                showReviewFeedback('Pilih relawan terlebih dahulu.', true);
+                return;
+            }
+            if (!rating || rating < 1 || rating > 5) {
+                showReviewFeedback('Rating wajib antara 1-5.', true);
                 return;
             }
 
-            try {
-                const assignments = await apiService.getAssignmentsByRequestId(requestId);
-                if (!Array.isArray(assignments) || assignments.length === 0) {
-                    showReviewFeedback('Tidak ditemukan relawan untuk permintaan tersebut.', true);
-                    return;
-                }
-                const volunteer = assignments[0].volunteer;
-                if (!volunteer || !volunteer.userId) {
-                    showReviewFeedback('Data relawan tidak lengkap.', true);
-                    return;
-                }
+            const choice = reviewOptions[selectedIndex];
 
+            try {
                 await apiService.createReview({
-                    requestId,
+                    requestId: choice.requestId,
                     reviewerUserId: currentUserId,
-                    revieweeUserId: volunteer.userId,
+                    revieweeUserId: choice.volunteerUserId,
                     rating,
                     comment
                 });
                 showReviewFeedback('Terima kasih! Ulasan berhasil dikirim.', false);
                 reviewForm[0].reset();
+                hydrateReviewOptions();
                 loadMyReviews();
             } catch (error) {
                 showReviewFeedback(error.message || 'Gagal mengirim ulasan.', true);
             }
         });
+    }
+
+    async function hydrateReviewOptions() {
+        if (!reviewSelect.length) {
+            return;
+        }
+        reviewSelect.prop('disabled', true).html('<option value=\"\">Memuat data...</option>');
+
+        try {
+            const requests = await fetchRequestsForLansia(currentUserId);
+            const completed = (requests || []).filter(req => (req.status || '').toUpperCase() === 'DONE');
+            reviewOptions = [];
+
+            for (const req of completed) {
+                try {
+                    const assignments = await apiService.getAssignmentsByRequestId(req.requestId);
+                    const assignment = (assignments || [])[0];
+                    if (assignment && assignment.volunteer) {
+                        reviewOptions.push({
+                            requestId: req.requestId,
+                            layanan: req.layanan,
+                            volunteerUserId: assignment.volunteer.userId,
+                            volunteerName: assignment.volunteer.fullname || assignment.volunteer.username || `Relawan #${assignment.volunteer.userId}`
+                        });
+                    }
+                } catch (error) {
+                    console.warn('Gagal memuat assignment untuk request', req.requestId, error);
+                }
+            }
+
+            if (!reviewOptions.length) {
+                reviewSelect.html('<option value=\"\">Belum ada layanan selesai</option>');
+                return;
+            }
+
+            const optionsHtml = reviewOptions.map((opt, idx) =>
+                `<option value=\"${idx}\">${escapeHtml(opt.volunteerName)} - ${escapeHtml(opt.layanan || '-') } (#${opt.requestId})</option>`
+            ).join('');
+            reviewSelect.html('<option value=\"\">Pilih relawan...</option>' + optionsHtml);
+            reviewSelect.prop('disabled', false);
+        } catch (error) {
+            console.error('Gagal menyiapkan opsi ulasan:', error);
+            reviewSelect.html('<option value=\"\">Gagal memuat data</option>');
+        }
     }
 
     async function loadMyReviews() {
