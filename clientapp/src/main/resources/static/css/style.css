@@ -53,10 +53,12 @@ body.light-mode .navbar {
     background-color: var(--light-surface) !important;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1) !important;
 }
+
 body.light-mode .navbar-nav .nav-link {
     /* Navbar link warna gelap saat Light Mode */
-    color: var(--light-text) !important; 
+    color: var(--light-text) !important;
 }
+
 body.light-mode .navbar-brand img {
     /* Logo glow dimatikan di light mode */
     filter: none;
@@ -69,18 +71,22 @@ body.light-mode #beranda {
     mask-image: none !important;
     -webkit-mask-image: none !important;
 }
-body.light-mode #beranda::before { /* Peta SVG */
+
+body.light-mode #beranda::before {
+    /* Peta SVG */
     opacity: 0.1;
     filter: grayscale(100%);
 }
+
 body.light-mode .full-height-hero h1 {
     /* Judul Hero menjadi warna aksen Teal */
-    color: var(--accent-color) !important; 
+    color: var(--accent-color) !important;
     text-shadow: none;
 }
+
 body.light-mode .full-height-hero p.lead {
     /* Subjudul Hero menjadi warna aksen Teal */
-    color: var(--accent-color) !important; 
+    color: var(--accent-color) !important;
     text-shadow: none;
 }
 
@@ -94,7 +100,8 @@ body.light-mode #contact {
     background-color: var(--light-surface) !important;
     color: var(--light-text);
     border: 1px solid var(--light-border);
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1); /* Shadow ringan */
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    /* Shadow ringan */
 }
 
 body.light-mode #about:hover,
@@ -108,20 +115,36 @@ body.light-mode #about h2,
 body.light-mode #about p {
     color: var(--light-text);
 }
+
 body.light-mode #about p.lead {
-    color: var(--accent-color); /* Lead text menggunakan aksen */
+    color: var(--accent-color);
+    /* Lead text menggunakan aksen */
 }
+
 body.light-mode #about .bi-people-fill {
-    color: var(--accent-color); /* Ikon People menjadi warna aksen */
-    filter: none; /* HILANGKAN GLOW */
+    color: var(--accent-color);
+    /* Ikon People menjadi warna aksen */
+    filter: none;
+    /* HILANGKAN GLOW */
 }
 
 /* Services Section Light Mode (#services-3d) */
 body.light-mode #services-3d {
     background: var(--light-bg-body) !important;
-    background-image: none !important; /* Hapus grid gelap */
+    background-image: none !important;
+    /* Hapus grid gelap */
     mask-image: none !important;
     -webkit-mask-image: none !important;
+}
+
+/* Judul Layanan: Kategori Layanan */
+body.light-mode #services-3d .content h2 {
+    color: var(--accent-color) !important;
+}
+
+/* Subjudul Layanan: Jelajahi berbagai dukungan... */
+body.light-mode #services-3d .content p {
+    color: var(--accent-color) !important;
 }
 
 /* Card Layanan di Light Mode */
@@ -130,22 +153,50 @@ body.light-mode #services-3d .card.service-card {
     border: 1px solid var(--light-border);
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
+
+
+
 body.light-mode #services-3d .card.service-card .bi {
-    color: var(--accent-color); /* Ikon Layanan warna aksen */
-    filter: none; /* HILANGKAN GLOW */
+    color: var(--accent-color);
+    /* Ikon Layanan warna aksen */
+    filter: none;
+    /* HILANGKAN GLOW */
 }
+
 body.light-mode #services-3d .card.service-card .card-title,
 body.light-mode #services-3d .card.service-card .card-text {
-    color: var(--light-text); /* Teks di card menjadi gelap */
+    color: var(--accent-color) !important;
+    /* Teks di card menjadi gelap */
+    font-weight: 500;
 }
 
 /* Tombol Slider Kontrol di Light Mode */
 body.light-mode #services-3d .controls button i {
-    color: var(--light-text) !important; /* Ikon kontrol menjadi gelap */
-    filter: none; /* HILANGKAN GLOW */
+    color: var(--light-text) !important;
+    /* Ikon kontrol menjadi gelap */
+    filter: none;
+    /* HILANGKAN GLOW */
 }
 
-/* ... (Kode CSS lainnya tidak diubah) ... */
+/* --- Kontak (#contact) --- */
+
+/* Judul Kontak: Hubungi Kami */
+body.light-mode #contact h2 {
+    color: var(--accent-color) !important;
+}
+
+/* Label Formulir Kontak: Nama Anda, Email Anda, Pesan */
+body.light-mode #contact .form-label {
+    color: var(--accent-color) !important;
+    font-weight: 500;
+}
+
+body.light-mode #contact .form-control {
+    /* Memastikan input fields kontras dan rapi di light mode */
+    background-color: var(--light-surface);
+    border-color: var(--light-border);
+    color: var(--light-text);
+}
 
 
 /* =================================================== */
@@ -739,8 +790,8 @@ MODIFIKASI MEDIA QUERIES UNTUK 3D ROTASI
     inset: 0;
     z-index: 0;
     background: radial-gradient(circle at 50% 40%, rgba(0, 168, 150, 0.10), transparent 60%),
-                radial-gradient(circle at 80% 80%, rgba(0, 168, 150, 0.07), transparent 70%),
-                radial-gradient(circle at 20% 90%, rgba(0, 255, 200, 0.05), transparent 80%);
+        radial-gradient(circle at 80% 80%, rgba(0, 168, 150, 0.07), transparent 70%),
+        radial-gradient(circle at 20% 90%, rgba(0, 255, 200, 0.05), transparent 80%);
     filter: blur(80px);
     opacity: 0.5;
     animation: ambientGlow 15s ease-in-out infinite alternate;
@@ -751,10 +802,12 @@ MODIFIKASI MEDIA QUERIES UNTUK 3D ROTASI
         opacity: 0.2;
         transform: scale(1);
     }
+
     50% {
         opacity: 0.2;
         transform: scale(1.03);
     }
+
     100% {
         opacity: 0.2;
         transform: scale(1);
@@ -1040,10 +1093,11 @@ Register/Login Form Styles (Dark Mode)
     border-color: #00A896 !important;
     font-size: 1.25rem;
     padding: .5rem 1rem;
-    
+
     /* Tombol tetap memiliki box-shadow dan tidak lagi beranimasi */
     box-shadow: 0 0 15px rgba(0, 168, 150, 0.6);
-    animation: none !important; /* Memastikan tidak ada animasi */
+    animation: none !important;
+    /* Memastikan tidak ada animasi */
 }
 
 /* ... (kode di bawahnya) ... */
@@ -1354,6 +1408,7 @@ body.dashboard-shell h6 {
     background-color: #f9fafe;
     border-color: var(--dashboard-border) !important;
 }
+
 .dashboard-shell .sidebar-logout-btn {
     border-color: rgba(239, 68, 68, 0.3);
     color: #ef4444;
