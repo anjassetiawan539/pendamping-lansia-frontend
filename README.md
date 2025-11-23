@@ -27,7 +27,7 @@ _(silahkan edit sesuai kebutuhan, ex:)_
 
 - [Slide of Presentation](https://www.canva.com/design/DAG3tit8ic8/xj_jlDPQWek82uhbTW9ykw/edit?utm_content=DAG3tit8ic8&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 - [BPMN & Entity Relational Diagram - Draw IO](https://drive.google.com/file/d/1gGroCouOfqROrz2dPkv7wkKc6c0yJVDT/view?usp=sharing)
-- [Data Dummy - Google Sheet](https://github.com/BPSDMP-Komdigi-Jogja-Bootcamp-Java/final-project-kelompok-12/blob/main/materials/DataDummy.md)
+- [Data Dummy](https://github.com/BPSDMP-Komdigi-Jogja-Bootcamp-Java/final-project-kelompok-12/blob/main/materials/DataDummy.md)
 - [Progress of Project - Google Sheet](https://docs.google.com/spreadsheets/d/1d96SFiw3_ncIa3mw9aPOuqSvJyRbctR4NsancnUSNo0/edit?usp=sharing)
 
 ---
