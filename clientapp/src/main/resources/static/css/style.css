@@ -29,6 +29,25 @@ Global Styles & Font
 }
 
 
+/* Menargetkan semua tombol utama (btn-primary) di Light Mode */
+body.light-mode .btn-primary {
+    /* Menerapkan Hijau Gelap pada latar belakang & border */
+    background-color: #007A6C !important;
+    border-color: #007A6C !important;
+    color: #fff !important;
+    /* Teks tetap putih */
+
+    /* Atur ulang box-shadow */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+    transition: all 0.3s ease;
+}
+
+body.light-mode .btn-primary:hover {
+    background-color: #00594e !important;
+    border-color: #00594e !important;
+    transform: scale(1.01);
+}
+
 
 /* ... (Kode CSS Global Variables dan Dark Mode di atas tidak diubah) ... */
 
@@ -59,9 +78,62 @@ body.light-mode .navbar-nav .nav-link {
     color: var(--light-text) !important;
 }
 
+/* --- PERBAIKAN HOVER/ACTIVE LINK (Light Mode) --- */
+body.light-mode .navbar-nav .nav-link:hover,
+body.light-mode .navbar-nav .nav-link.active {
+    /* UBAH WARNA TEKS HOVER/ACTIVE menjadi HIJAU GELAP */
+    color: #007A6C !important;
+    border-bottom: none;
+}
+
+/* Border-bottom di desktop */
+@media (min-width: 992px) {
+
+    /* Mengubah warna garis bawah (border-bottom) menjadi HIJAU GELAP */
+    body.light-mode .navbar-nav .nav-link:hover,
+    body.light-mode .navbar-nav .nav-link.active {
+        border-bottom: 3px solid #007A6C;
+    }
+}
+
 body.light-mode .navbar-brand img {
     /* Logo glow dimatikan di light mode */
     filter: none;
+}
+
+
+/* 🟢 PERBAIKAN: Targetkan SEMUA ikon di dalam navbar untuk memastikan kontras */
+body.light-mode .navbar i {
+    color: var(--dark-text) !important;
+    /* Paksa menjadi warna gelap */
+    filter: none !important;
+    /* Hapus semua glow yang mungkin membuatnya transparan */
+    opacity: 1 !important;
+    /* Pastikan visibilitas penuh */
+}
+
+/* Tombol Navbar Outline Primary */
+body.light-mode .navbar .btn-outline-primary {
+    border-color: var(--accent-color) !important;
+    color: var(--accent-color) !important;
+    background-color: transparent !important;
+}
+
+
+/* Tombol di navbar (Daftar/Masuk) */
+body.light-mode .navbar .btn-primary {
+    /* Mengubah warna menjadi hijau gelap */
+    background-color: #007A6C !important;
+    border-color: #007A6C !important;
+    color: #fff !important;
+
+
+}
+
+body.light-mode .navbar .btn-primary:hover {
+    /* Efek hover yang lebih gelap */
+    background-color: #00594e !important;
+    border-color: #00594e !important;
 }
 
 /* Hero Section Light Mode */
@@ -72,6 +144,15 @@ body.light-mode #beranda {
     -webkit-mask-image: none !important;
 }
 
+/* Menyesuaikan Tombol CTA utama: Ajukan Permintaan Layanan */
+body.light-mode #beranda .btn-primary {
+    /* Mengubah warna menjadi hijau gelap */
+    background-color: #007A6C !important;
+    border-color: #007A6C !important;
+    color: #fff !important;
+
+}
+
 body.light-mode #beranda::before {
     /* Peta SVG */
     opacity: 0.1;
@@ -80,15 +161,21 @@ body.light-mode #beranda::before {
 
 body.light-mode .full-height-hero h1 {
     /* Judul Hero menjadi warna aksen Teal */
-    color: var(--accent-color) !important;
+    color: #007A6C !important;
+    /* Hijau lebih gelap */
     text-shadow: none;
 }
 
 body.light-mode .full-height-hero p.lead {
     /* Subjudul Hero menjadi warna aksen Teal */
-    color: var(--accent-color) !important;
+    color: #007A6C !important;
+    /* Hijau lebih gelap */
     text-shadow: none;
+    font-weight: 700;
 }
+
+
+
 
 /* =================================================== */
 /* MODIFIKASI LIGHT MODE UNTUK SECTION LAIN */
@@ -117,7 +204,8 @@ body.light-mode #about p {
 }
 
 body.light-mode #about p.lead {
-    color: var(--accent-color);
+    color: #007A6C !important;
+    /* Hijau lebih gelap */
     /* Lead text menggunakan aksen */
 }
 
@@ -139,12 +227,12 @@ body.light-mode #services-3d {
 
 /* Judul Layanan: Kategori Layanan */
 body.light-mode #services-3d .content h2 {
-    color: var(--accent-color) !important;
+    color: #007A6C !important;
 }
 
 /* Subjudul Layanan: Jelajahi berbagai dukungan... */
 body.light-mode #services-3d .content p {
-    color: var(--accent-color) !important;
+    color: #007A6C !important;
 }
 
 /* Card Layanan di Light Mode */
@@ -157,7 +245,7 @@ body.light-mode #services-3d .card.service-card {
 
 
 body.light-mode #services-3d .card.service-card .bi {
-    color: var(--accent-color);
+    color: #007A6C !important;
     /* Ikon Layanan warna aksen */
     filter: none;
     /* HILANGKAN GLOW */
@@ -165,29 +253,36 @@ body.light-mode #services-3d .card.service-card .bi {
 
 body.light-mode #services-3d .card.service-card .card-title,
 body.light-mode #services-3d .card.service-card .card-text {
-    color: var(--accent-color) !important;
+    color: #007A6C !important;
     /* Teks di card menjadi gelap */
     font-weight: 500;
 }
 
 /* Tombol Slider Kontrol di Light Mode */
 body.light-mode #services-3d .controls button i {
-    color: var(--light-text) !important;
+    color: #007A6C !important;
     /* Ikon kontrol menjadi gelap */
     filter: none;
     /* HILANGKAN GLOW */
+}
+
+/* Tambahkan efek hover agar tetap konsisten */
+body.light-mode #services-3d .controls button:hover i {
+    /* Sedikit menggelapkan warna saat di-hover */
+    color: #00594e !important;
+    transform: scale(1.1);
 }
 
 /* --- Kontak (#contact) --- */
 
 /* Judul Kontak: Hubungi Kami */
 body.light-mode #contact h2 {
-    color: var(--accent-color) !important;
+    color: #007A6C !important;
 }
 
 /* Label Formulir Kontak: Nama Anda, Email Anda, Pesan */
 body.light-mode #contact .form-label {
-    color: var(--accent-color) !important;
+    color: #007A6C !important;
     font-weight: 500;
 }
 
@@ -198,6 +293,34 @@ body.light-mode #contact .form-control {
     color: var(--light-text);
 }
 
+/* Targetkan IKON (i) untuk styling visual di Contact */
+body.light-mode #contact h2 .contact-icon .bi {
+    /* UBAH WARNA IKON EMAIL menjadi HIJAU GELAP */
+    color: #007A6C;
+    font-size: 1.2em;
+    vertical-align: -0.1em;
+    /* Hapus filter/glow yang mungkin ada */
+    filter: none;
+}
+
+/* Tombol "Kirim Pesan" di Contact Section */
+body.light-mode #contact .btn-primary {
+    /* Menerapkan Hijau Gelap pada latar belakang & border */
+    background-color: #007A6C !important;
+    border-color: #007A6C !important;
+    font-weight: 500;
+    color: #fff !important;
+    /* Teks tetap putih */
+
+    /* Hapus box-shadow dark mode */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Efek hover untuk tombol Kirim Pesan */
+body.light-mode #contact .btn-primary:hover {
+    background-color: #00594e !important;
+    border-color: #00594e !important;
+}
 
 /* =================================================== */
 /* GLOBAL DARK MODE BASE */
@@ -1146,6 +1269,7 @@ body.dashboard-shell {
     min-height: 100vh;
     --bs-body-bg: var(--dashboard-bg);
     --bs-body-color: var(--dashboard-text);
+    
 }
 
 body.dashboard-shell h1,
