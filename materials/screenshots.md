@@ -233,13 +233,3 @@ Halaman untuk relawan melihat rating dan review yang mereka terima dari lansia. 
 Halaman ini membantu relawan memahami feedback mereka dan meningkatkan kualitas layanan.
 
 ---
-
-## 📊 Summary
-
-### Platform Features Overview:
-
-| Role        | Key Features                                 | Screenshots   |
-| ----------- | -------------------------------------------- | ------------- |
-| **Admin**   | User Management, Dashboard, Statistics       | 5 screenshots |
-| **Lansia**  | Request Services, Rating, Profile Management | 4 screenshots |
-| **Relawan** | Accept Tasks, View Ratings, Manage Services  | 3 screenshots |

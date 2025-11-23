@@ -30,7 +30,7 @@
 
 ### **`Screenshot:`**
 
-- Dashboard (Example)
+- [Screenshoot](https://github.com/BPSDMP-Komdigi-Jogja-Bootcamp-Java/final-project-kelompok-12/blob/main/materials/screenshots.md#admin-features)
 
 ---
 
