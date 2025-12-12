@@ -1,4 +1,4 @@
-# Pendamping Lansia - Web Frontend
+# Platform Pendamping Lansia Digital - Web Frontend
 
 Ini adalah **web frontend** untuk proyek **Pendamping Lansia**, bagian dari proyek kelompok.
 Frontend dibangun menggunakan **HTML, CSS, dan JavaScript murni**.
